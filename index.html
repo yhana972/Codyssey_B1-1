@@ -11,14 +11,53 @@
 
 <body>
     <header>
-        <nav></nav>
+        <nav>
+            <a href="#" class="logo">Portfolio</a>
+            <ul>
+                <li><a href="#hero">
+                    Hero
+                </a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+        <button type="button" aria-label="메뉴 열기">☰</button>
+        <button type="button" aria-label="다크 모드 전환">🌙</button>
     </header>
     <main>
-        <section>Hero</section>
-        <section>About</section>
-        <section>Skills</section>
-        <section>Projects</section>
-        <section>Contact</section>
+        <section id="hero">
+            <p>안녕하세요 👋</p>
+
+            <h1>
+                클라이언트 개발자
+                김나현입니다.
+            </h1>
+
+            <p>
+                웹과 XR 개발 경험을 바탕으로
+                사용자에게 편리한 서비스를 만드는 개발자입니다.
+            </p>
+
+            <a href="#projects">프로젝트 보기</a>
+            <a href="#contact">연락하기</a>
+        </section>
+        <section id="about">
+            <h2>About Me</h2>
+
+            <img
+                src="images/profile.jpg"
+                alt="김나현 프로필 사진"
+            >
+
+            <p>
+                자기소개...
+            </p>
+        </section>
+        <section id="skills">Skills</section>
+        <section id="projects">Projects</section>
+        <section id="contact">Contact</section>
     </main>
     <footer></footer>
     <script src="js/main.js" defer></script>
