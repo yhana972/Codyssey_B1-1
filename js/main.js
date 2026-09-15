@@ -20,6 +20,11 @@ const scrollTopButton =
 const siteHeader =
     document.querySelector(".site-header");
 
+const pointerEffect =
+    document.querySelector(".pointer-effect");
+
+const hasFinePointer =
+    window.matchMedia("(pointer: fine)").matches;
 
 // ==============================
 // Theme
@@ -130,3 +135,37 @@ scrollTopButton.addEventListener(
         });
     }
 );
+
+// ==============================
+// Pointer Effect
+// ==============================
+const updatePointerEffect = (event) => {
+    const x = `${event.clientX}px`;
+    const y = `${event.clientY}px`;
+
+    document.documentElement.style.setProperty(
+        "--pointer-x",
+        x
+    );
+
+    document.documentElement.style.setProperty(
+        "--pointer-y",
+        y
+    );
+
+    pointerEffect.classList.add("active");
+};
+
+if (hasFinePointer) {
+    window.addEventListener(
+        "pointermove",
+        updatePointerEffect
+    );
+
+    document.documentElement.addEventListener(
+        "mouseleave",
+        () => {
+            pointerEffect.classList.remove("active");
+        }
+    );
+}

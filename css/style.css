@@ -67,6 +67,11 @@
     --radius-md:16px;
 
     --transition: 0.3s ease;
+
+    --pointer-x: 50vw;
+    --pointer-y: 50vh;
+
+    --lamp-light: #f2c77d;
 }
 
 [data-theme="dark"]{
@@ -110,6 +115,26 @@
             rgba(7, 28, 42, 0.72)
         );
 
+}
+
+[data-theme="dark"] .pointer-effect {
+    background:
+        radial-gradient(
+            circle 220px at var(--pointer-x) var(--pointer-y),
+            rgba(242, 199, 125, 0.11),
+            rgba(242, 199, 125, 0.035) 45%,
+            transparent 72%
+        ),
+        radial-gradient(
+            ellipse 300px 140px at var(--pointer-x) var(--pointer-y),
+            rgba(112, 212, 208, 0.06),
+            transparent 70%
+        );
+}
+
+[data-theme="dark"] .pointer-effect::before,
+[data-theme="dark"] .pointer-effect::after {
+    display: none;
 }
 
 *,
@@ -936,6 +961,84 @@ img{
     transform: translateY(-3px);
 }
 
+.pointer-effect {
+    position: fixed;
+    inset: 0;
+
+    pointer-events: none;
+
+    opacity: 0;
+
+    transition: opacity 0.4s ease;
+
+    z-index: 0;
+
+    background:
+        radial-gradient(
+            circle at var(--pointer-x) var(--pointer-y),
+            rgba(255, 255, 255, 0.48) 0,
+            rgba(126, 224, 226, 0.16) 55px,
+            transparent 150px
+        );
+}
+
+.pointer-effect::before {
+    content: "";
+
+    position: absolute;
+
+    left: var(--pointer-x);
+    top: var(--pointer-y);
+
+    width: 70px;
+    height: 70px;
+
+    border: 1px solid rgba(40, 199, 194, 0.22);
+    border-radius: 50%;
+
+    transform:
+        translate(-50%, -50%)
+        scale(0.4);
+
+    opacity: 0;
+
+    animation: water-ripple 3s ease-out infinite;
+}
+
+.pointer-effect::after {
+    content: "";
+
+    position: absolute;
+
+    left: var(--pointer-x);
+    top: var(--pointer-y);
+
+    width: 110px;
+    height: 110px;
+
+    border: 1px solid rgba(79, 184, 223, 0.14);
+    border-radius: 50%;
+
+    transform:
+        translate(-50%, -50%)
+        scale(0.5);
+
+    opacity: 0;
+
+    animation:
+        water-ripple 3s ease-out 0.8s infinite;
+}
+
+.pointer-effect.active {
+    opacity: 1;
+}
+
+main,
+.site-footer {
+    position: relative;
+    z-index: 1;
+}
+
 @media (min-width: 768px) {
     .nav-list {
         position: static;
@@ -1008,5 +1111,38 @@ img{
         transition-duration: 0.01ms !important;
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
+    }
+
+    .pointer-effect::before,
+    .pointer-effect::after {
+        animation: none;
+    }
+}
+
+@media (pointer: fine) {
+    .pointer-effect {
+        display: block;
+    }
+}
+
+@keyframes water-ripple {
+    0% {
+        transform:
+            translate(-50%, -50%)
+            scale(0.4);
+
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 0.55;
+    }
+
+    100% {
+        transform:
+            translate(-50%, -50%)
+            scale(2.5);
+
+        opacity: 0;
     }
 }
