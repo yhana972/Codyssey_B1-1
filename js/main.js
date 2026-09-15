@@ -1,4 +1,29 @@
-const themeToggle = document.querySelector(".theme-toggle");
+// ==============================
+// DOM
+// ==============================
+
+const themeToggle =
+    document.querySelector(".theme-toggle");
+
+const menuToggle =
+    document.querySelector(".menu-toggle");
+
+const navList =
+    document.querySelector(".nav-list");
+
+const navLinks =
+    document.querySelectorAll(".nav-list a");
+
+const scrollTopButton =
+    document.querySelector(".scroll-top");
+
+const siteHeader =
+    document.querySelector(".site-header");
+
+
+// ==============================
+// Theme
+// ==============================
 
 const updateThemeButton = (theme) => {
     if (theme === "dark") {
@@ -41,3 +66,67 @@ themeToggle.addEventListener("click", () => {
 
     localStorage.setItem("theme", currentTheme);
 });
+
+// ==============================
+// Mobile Navigation
+// ==============================
+
+menuToggle.addEventListener("click", () => {
+    const isOpen =
+        navList.classList.toggle("active");
+
+    menuToggle.setAttribute(
+        "aria-expanded",
+        String(isOpen)
+    );
+
+    menuToggle.textContent =
+        isOpen ? "×" : "☰";
+});
+
+navLinks.forEach((link) => {
+    link.addEventListener("click", () => {
+        navList.classList.remove("active");
+
+        menuToggle.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+
+        menuToggle.textContent = "☰";
+    });
+});
+
+
+// ==============================
+// Scroll
+// ==============================
+
+const updateScrollUI = () => {
+    scrollTopButton.classList.toggle(
+        "active",
+        window.scrollY >= 300
+    );
+
+    siteHeader.classList.toggle(
+        "scrolled",
+        window.scrollY >= 60
+    );
+};
+
+window.addEventListener(
+    "scroll",
+    updateScrollUI
+);
+
+updateScrollUI();
+
+scrollTopButton.addEventListener(
+    "click",
+    () => {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+        });
+    }
+);

@@ -208,6 +208,15 @@ img{
         border-color var(--transition);
 }
 
+.site-header.scrolled {
+    background: var(--color-surface-soft);
+
+    box-shadow:
+        0 10px 30px rgba(21, 154, 165, 0.08);
+
+    border-bottom-color: var(--color-border);
+}
+
 .site-nav{
     width: min(100% -2rem, var(--max-width));
 
@@ -220,6 +229,8 @@ img{
     justify-content: space-between;
 
     gap: var(--space-md);
+    
+    position: relative;
 }
 
 .logo{
@@ -249,6 +260,50 @@ img{
 
 .nav-list{
     display:none;
+}
+
+.nav-list.active{
+    position: absolute;
+
+    top: calc(100% + 0.75rem);
+    left: 0;
+    right: 0;
+    
+    display: flex;
+    flex-direction: column;
+
+    gap: 0;
+
+    padding: 0.75rem;
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+
+    background: var(--color-surface-soft);
+
+    backdrop-filter: blur(16px);
+
+    box-shadow: 0 18px 45px rgba(21,154,165,0.12);
+}
+
+.nav-list.active a{
+    display: block;
+
+    padding: 0.85rem 1rem;
+
+    border-radius: var(--radius-sm);
+
+    color: var(--color-text-muted);
+
+    transition: 
+        color var(--transition),
+        background-color var(--transition);
+}
+
+.nav-list.active a:hover{
+    color: var(--color-aqua-deep);
+
+    background: rgba(40, 199, 194, 0.08);
 }
 
 .nav-actions{
@@ -883,10 +938,22 @@ img{
 
 @media (min-width: 768px) {
     .nav-list {
+        position: static;
+
         display: flex;
+        flex-direction: row;
+
         align-items: center;
 
         gap: var(--space-lg);
+
+        padding: 0;
+
+        border: 0;
+
+        background: transparent;
+
+        box-shadow: none;
     }
 
     .nav-list a {
