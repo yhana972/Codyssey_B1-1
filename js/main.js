@@ -48,6 +48,15 @@ const messageInput =
 
 const formStatus = 
     document.querySelector(".form-status")
+
+const GITHUB_USERNAME = "yhana972";
+
+const projectsList =
+    document.querySelector("#projects-list")
+
+const GITHUB_API_URL =
+    `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=6`;
+
 // ==============================
 // Theme
 // ==============================
@@ -397,3 +406,158 @@ contactForm.addEventListener(
         contactForm.reset();
     }
 );
+
+// ==============================
+// GitHub Projects
+// ==============================
+const renderLoading = () => {
+    projectsList.innerHTML = `
+        <p class="projects-status">
+            프로젝트를 불러오는 중...
+        </p>
+    `;
+};
+
+const renderEmpty = () => {
+    projectsList.innerHTML = `
+        <p class="projects-status">
+            표시할 프로젝트가 없습니다.
+        </p>
+    `;
+};
+
+const renderError = (message) => {
+    projectsList.innerHTML = `
+        <div class="projects-status">
+            <p>${message}</p>
+
+            <button
+                type="button"
+                class="retry-projects"
+            >
+                다시 시도
+            </button>
+        </div>
+    `;
+};
+
+const renderProjects = (repositories) => {
+    const cards = repositories.map(
+        (repository, index) => {
+            const {
+                name,
+                description,
+                html_url,
+                language,
+                stargazers_count,
+                forks_count,
+            } = repository;
+
+            return `
+                <article class="project-card">
+
+                    <div class="project-card-top">
+                        <span class="project-depth">
+                            DEPTH ${String(index + 1).padStart(2, "0")}
+                        </span>
+
+                        <span class="project-language">
+                            ${language || "Unknown"}
+                        </span>
+                    </div>
+
+                    <h3>${name}</h3>
+
+                    <p>
+                        ${description || "프로젝트 설명이 없습니다."}
+                    </p>
+
+                    <div class="project-meta">
+                        <span>
+                            ★ ${stargazers_count}
+                        </span>
+
+                        <span>
+                            Fork ${forks_count}
+                        </span>
+
+                        <a
+                            href="${html_url}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            GitHub ↗
+                        </a>
+                    </div>
+
+                </article>
+            `;
+        }
+    );
+
+    projectsList.innerHTML =
+        cards.join("");
+};
+
+const fetchProjects = async () => {
+    renderLoading();
+
+    try {
+        const response =
+            await fetch(GITHUB_API_URL);
+
+        if (response.status === 403) {
+            throw new Error("RATE_LIMIT");
+        }
+
+        if (!response.ok) {
+            throw new Error(
+                `HTTP_${response.status}`
+            );
+        }
+
+        const repositories =
+            await response.json();
+
+        if (repositories.length === 0) {
+            renderEmpty();
+
+            return;
+        }
+
+        renderProjects(repositories);
+
+    } catch (error) {
+        console.error(error);
+
+        if (error.message === "RATE_LIMIT") {
+            renderError(
+                "GitHub API 요청 한도를 초과했습니다. 잠시 후 다시 시도해주세요."
+            );
+
+            return;
+        }
+
+        renderError(
+            "프로젝트를 불러올 수 없습니다."
+        );
+    }
+};
+
+projectsList.addEventListener(
+    "click",
+    (event) => {
+        const retryButton =
+            event.target.closest(
+                ".retry-projects"
+            );
+
+        if (!retryButton) {
+            return;
+        }
+
+        fetchProjects();
+    }
+);
+
+fetchProjects();
