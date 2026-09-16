@@ -26,6 +26,14 @@ const pointerEffect =
 const hasFinePointer =
     window.matchMedia("(pointer: fine)").matches;
 
+const revealElements =
+    document.querySelectorAll("[data-reveal]");
+
+const prefersReducedMotion =
+    window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+    ).matches;
+
 // ==============================
 // Theme
 // ==============================
@@ -168,4 +176,34 @@ if (hasFinePointer) {
             pointerEffect.classList.remove("active");
         }
     );
+}
+
+// ==============================
+// Scroll Reveal
+// ==============================
+const revealObserver = new IntersectionObserver(
+    (entries) => {
+        entries.forEach((entry) => {
+            if (!entry.isIntersecting) {
+                return;
+            }
+
+            entry.target.classList.add("visible");
+
+            revealObserver.unobserve(entry.target);
+        });
+    },
+    {
+        threshold: 0.2,
+    }
+);
+
+if (prefersReducedMotion) {
+    revealElements.forEach((element) => {
+        element.classList.add("visible");
+    });
+} else {
+    revealElements.forEach((element) => {
+        revealObserver.observe(element);
+    });
 }

@@ -137,6 +137,22 @@
     display: none;
 }
 
+[data-reveal]{
+    opacity: 0;
+
+    transform : translateY(28px);
+
+    transition: 
+        opacity 0.8s ease,
+        transform 0.8s ease;
+}
+
+[data-reveal].visible{
+    opacity: 1;
+
+    transform: translateY(0);
+}
+
 *,
 *::before,
 *::after{
@@ -652,6 +668,14 @@ img{
     font-size: 0.9rem;
 }
 
+.skill-card:nth-child(2) {
+    transition-delay: 0.1s;
+}
+
+.skill-card:nth-child(3) {
+    transition-delay: 0.2s;
+}
+
 .project-grid{
     display: grid;
 
@@ -1116,6 +1140,14 @@ main,
     .pointer-effect::before,
     .pointer-effect::after {
         animation: none;
+    }
+
+    [data-reveal]{
+        opacity: 1;
+
+        transform:  none;
+
+        transition: none;
     }
 }
 
