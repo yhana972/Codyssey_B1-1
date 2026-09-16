@@ -34,6 +34,20 @@ const prefersReducedMotion =
         "(prefers-reduced-motion: reduce)"
     ).matches;
 
+const contactForm = 
+    document.querySelector(".contact-form");
+
+const nameInput = 
+    document.querySelector("#name");
+
+const emailInput =
+    document.querySelector("#email");
+
+const messageInput =
+    document.querySelector("#message");
+
+const formStatus = 
+    document.querySelector(".form-status")
 // ==============================
 // Theme
 // ==============================
@@ -207,3 +221,179 @@ if (prefersReducedMotion) {
         revealObserver.observe(element);
     });
 }
+
+// ==============================
+// Contact Form
+// ==============================
+
+const emailPattern =
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const showError = (input, message) => {
+    input.classList.add("error");
+
+    const formField =
+        input.closest(".form-field");
+
+    const errorMessage =
+        formField.querySelector(
+            ".error-message"
+        );
+
+    errorMessage.textContent = message;
+};
+
+const clearError = (input) => {
+    input.classList.remove("error");
+
+    const formField =
+        input.closest(".form-field");
+
+    const errorMessage =
+        formField.querySelector(
+            ".error-message"
+        );
+
+    errorMessage.textContent = "";
+};
+
+const validateName = () => {
+    const value =
+        nameInput.value.trim();
+
+    if (!value) {
+        showError(
+            nameInput,
+            "이름을 입력해주세요."
+        );
+
+        return false;
+    }
+
+    clearError(nameInput);
+
+    return true;
+};
+
+const validateEmail = () => {
+    const value =
+        emailInput.value.trim();
+
+    if (!value) {
+        showError(
+            emailInput,
+            "이메일을 입력해주세요."
+        );
+
+        return false;
+    }
+
+    if (!emailPattern.test(value)) {
+        showError(
+            emailInput,
+            "올바른 이메일 형식을 입력해주세요."
+        );
+
+        return false;
+    }
+
+    clearError(emailInput);
+
+    return true;
+};
+
+const validateMessage = () => {
+    const value =
+        messageInput.value.trim();
+
+    if (!value) {
+        showError(
+            messageInput,
+            "메시지를 입력해주세요."
+        );
+
+        return false;
+    }
+
+    clearError(messageInput);
+
+    return true;
+};
+
+const validateForm = () => {
+    const isNameValid =
+        validateName();
+
+    const isEmailValid =
+        validateEmail();
+
+    const isMessageValid =
+        validateMessage();
+
+    return (
+        isNameValid &&
+        isEmailValid &&
+        isMessageValid
+    );
+};
+
+const clearFormStatus = () => {
+    formStatus.textContent = "";
+};
+
+nameInput.addEventListener(
+    "input",
+    () => {
+        clearFormStatus();
+
+        if (nameInput.value.trim()) {
+            clearError(nameInput);
+        }
+    }
+);
+
+emailInput.addEventListener(
+    "input",
+    () => {
+        clearFormStatus();
+
+        const value =
+            emailInput.value.trim();
+
+        if (emailPattern.test(value)) {
+            clearError(emailInput);
+        }
+    }
+);
+
+messageInput.addEventListener(
+    "input",
+    () => {
+        clearFormStatus();
+
+        if (messageInput.value.trim()) {
+            clearError(messageInput);
+        }
+    }
+);
+
+contactForm.addEventListener(
+    "submit",
+    (event) => {
+        event.preventDefault();
+
+        const isValid =
+            validateForm();
+
+        if (!isValid) {
+            formStatus.textContent = "";
+
+            return;
+        }
+
+        formStatus.textContent =
+            "메시지가 정상적으로 작성되었습니다.";
+
+        contactForm.reset();
+    }
+);
