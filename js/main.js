@@ -2,75 +2,188 @@
 // DOM
 // ==========================================================
 
-const themeToggle = document.querySelector(".theme-toggle");
-const siteNav = document.querySelector(".site-nav");
-const menuToggle = document.querySelector(".menu-toggle");
-const navList = document.querySelector(".nav-list");
-const navLinks = document.querySelectorAll(".nav-list a");
+const themeToggle =
+    document.querySelector(".theme-toggle");
 
-const internalLinks = document.querySelectorAll(
-    'a[href^="#"]:not([href="#"])'
-);
+const siteNav =
+    document.querySelector(".site-nav");
 
-const scrollTopButton = document.querySelector(".scroll-top");
-const siteHeader = document.querySelector(".site-header");
-const pointerEffect = document.querySelector(".pointer-effect");
-const revealElements = document.querySelectorAll("[data-reveal]");
+const menuToggle =
+    document.querySelector(".menu-toggle");
 
-const typingText = document.querySelector("#typing-text");
-const typingCursor = document.querySelector(".typing-cursor");
+const navList =
+    document.querySelector(".nav-list");
 
-const contactForm = document.querySelector("#contact-form");
-const submitButton = contactForm.querySelector(".submit-button");
-const submitLabel = submitButton.querySelector(".submit-label");
+const navLinks =
+    document.querySelectorAll(".nav-list a");
 
-const nameInput = document.querySelector("#name");
-const emailInput = document.querySelector("#email");
-const messageInput = document.querySelector("#message");
-const formStatus = document.querySelector(".form-status");
+const internalLinks =
+    document.querySelectorAll(
+        'a[href^="#"]:not([href="#"])'
+    );
 
-const projectsList = document.querySelector("#projects-list");
-const projectFilters = document.querySelector("#project-filters");
+const scrollTopButton =
+    document.querySelector(".scroll-top");
+
+const siteHeader =
+    document.querySelector(".site-header");
+
+const pointerEffect =
+    document.querySelector(".pointer-effect");
+
+const revealElements =
+    document.querySelectorAll("[data-reveal]");
+
+const typingText =
+    document.querySelector("#typing-text");
+
+const typingCursor =
+    document.querySelector(".typing-cursor");
+
+const contactForm =
+    document.querySelector("#contact-form");
+
+const submitButton =
+    contactForm.querySelector(".submit-button");
+
+const submitLabel =
+    submitButton.querySelector(".submit-label");
+
+const nameInput =
+    document.querySelector("#name");
+
+const emailInput =
+    document.querySelector("#email");
+
+const messageInput =
+    document.querySelector("#message");
+
+const formStatus =
+    document.querySelector(".form-status");
+
+const projectsList =
+    document.querySelector("#projects-list");
+
+const projectFilters =
+    document.querySelector("#project-filters");
 
 
 // ==========================================================
 // CONFIG
 // ==========================================================
 
-const GITHUB_USERNAME = "yhana972";
+const GITHUB_USERNAME =
+    "yhana972";
 
 const GITHUB_API_URL =
     `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&direction=desc&per_page=30`;
 
-const HEADER_SCROLL_THRESHOLD = 60;
-const SCROLL_TOP_THRESHOLD = 300;
-const TABLET_BREAKPOINT = 768;
-const REVEAL_THRESHOLD = 0.2;
+const HEADER_SCROLL_THRESHOLD =
+    60;
 
-const TYPING_SPEED = 90;
-const TYPING_START_DELAY = 450;
+const SCROLL_TOP_THRESHOLD =
+    300;
 
-const hasFinePointer = window.matchMedia(
-    "(pointer: fine)"
-).matches;
+const TABLET_BREAKPOINT =
+    768;
 
-const prefersReducedMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)"
-).matches;
+const REVEAL_THRESHOLD =
+    0.2;
+
+const TYPING_SPEED =
+    90;
+
+const TYPING_START_DELAY =
+    450;
 
 
 // ==========================================================
-// SYSTEM THEME
+// MEDIA QUERY
 // ==========================================================
 
-const systemThemeQuery = window.matchMedia(
-    "(prefers-color-scheme: dark)"
-);
+const hasFinePointer =
+    window.matchMedia(
+        "(pointer: fine)"
+    ).matches;
+
+const prefersReducedMotion =
+    window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+const systemThemeQuery =
+    window.matchMedia(
+        "(prefers-color-scheme: dark)"
+    );
+
+
+// ==========================================================
+// THEME INITIAL VALUE
+// ==========================================================
 
 const getSystemTheme = () => {
     return systemThemeQuery.matches
         ? "dark"
         : "light";
+};
+
+
+const savedTheme =
+    localStorage.getItem("theme");
+
+const hasSavedTheme =
+    savedTheme === "dark" ||
+    savedTheme === "light";
+
+
+// ==========================================================
+// APPLICATION STATE
+// ==========================================================
+
+/*
+    애플리케이션에서 변경되는 상태를
+    하나의 STATE 객체에 모아 관리한다.
+
+    기본 흐름:
+    사용자 이벤트
+    → STATE 변경
+    → render / UI 함수 호출
+    → 화면 반영
+*/
+
+const STATE = {
+    theme: {
+        // 초기 테마 우선순위:
+        // localStorage 사용자 설정 → 시스템 테마 설정
+        current:
+            hasSavedTheme
+                ? savedTheme
+                : getSystemTheme(),
+
+        hasUserPreference:
+            hasSavedTheme,
+    },
+
+    menu: {
+        isOpen:
+            false,
+    },
+
+    projects: {
+        repositories:
+            [],
+
+        filter:
+            "ALL",
+
+        status:
+            "idle",
+    },
+
+    contact: {
+        isSubmitting:
+            false,
+    },
 };
 
 
@@ -80,7 +193,8 @@ const getSystemTheme = () => {
 
 const updateThemeButton = (theme) => {
     if (theme === "dark") {
-        themeToggle.textContent = "☀";
+        themeToggle.textContent =
+            "☀";
 
         themeToggle.setAttribute(
             "aria-label",
@@ -90,7 +204,8 @@ const updateThemeButton = (theme) => {
         return;
     }
 
-    themeToggle.textContent = "☾";
+    themeToggle.textContent =
+        "☾";
 
     themeToggle.setAttribute(
         "aria-label",
@@ -99,62 +214,71 @@ const updateThemeButton = (theme) => {
 };
 
 
-const applyTheme = (theme) => {
-    document.documentElement.dataset.theme = theme;
+const renderTheme = () => {
+    document.documentElement
+        .dataset
+        .theme =
+        STATE.theme.current;
 
-    updateThemeButton(theme);
+    updateThemeButton(
+        STATE.theme.current
+    );
 };
 
 
-const savedTheme = localStorage.getItem("theme");
+/*
+    Theme Flow
 
-const hasSavedTheme =
-    savedTheme === "dark" ||
-    savedTheme === "light";
+    Theme Button Click
+    → STATE.theme.current 변경
+    → renderTheme()
+    → data-theme 변경
+    → 화면 변경
+*/
 
-let currentTheme = hasSavedTheme
-    ? savedTheme
-    : getSystemTheme();
-
-let hasUserThemePreference = hasSavedTheme;
-
-applyTheme(currentTheme);
-
-
-themeToggle.addEventListener(
-    "click",
-    () => {
-        currentTheme =
-            currentTheme === "light"
-                ? "dark"
-                : "light";
-
-        hasUserThemePreference = true;
-
-        applyTheme(currentTheme);
-
-        localStorage.setItem(
-            "theme",
-            currentTheme
-        );
-    }
-);
-
-
-systemThemeQuery.addEventListener(
-    "change",
-    (event) => {
-        if (hasUserThemePreference) {
-            return;
-        }
-
-        currentTheme = event.matches
+const handleThemeToggle = () => {
+    STATE.theme.current =
+        STATE.theme.current === "light"
             ? "dark"
             : "light";
 
-        applyTheme(currentTheme);
+    STATE.theme.hasUserPreference =
+        true;
+
+    renderTheme();
+
+    localStorage.setItem(
+        "theme",
+        STATE.theme.current
+    );
+};
+
+
+/*
+    사용자가 직접 테마를 선택하지 않은 경우에만
+    OS 테마 변경을 실시간 반영한다.
+*/
+
+const handleSystemThemeChange = (
+    event
+) => {
+    if (
+        STATE.theme.hasUserPreference
+    ) {
+        return;
     }
-);
+
+    STATE.theme.current =
+        event.matches
+            ? "dark"
+            : "light";
+
+    renderTheme();
+};
+
+
+// 초기 Theme Rendering
+renderTheme();
 
 
 // ==========================================================
@@ -177,15 +301,18 @@ const runHeroTyping = () => {
             fullText;
 
         if (typingCursor) {
-            typingCursor.hidden = true;
+            typingCursor.hidden =
+                true;
         }
 
         return;
     }
 
-    typingText.textContent = "";
+    typingText.textContent =
+        "";
 
-    let typingIndex = 0;
+    let typingIndex =
+        0;
 
     const typeNextCharacter = () => {
         if (
@@ -198,7 +325,8 @@ const runHeroTyping = () => {
         typingText.textContent +=
             characters[typingIndex];
 
-        typingIndex += 1;
+        typingIndex +=
+            1;
 
         window.setTimeout(
             typeNextCharacter,
@@ -220,145 +348,145 @@ runHeroTyping();
 // MOBILE NAVIGATION
 // ==========================================================
 
-const setMenuState = (isOpen) => {
+const renderMenu = () => {
     navList.classList.toggle(
         "active",
-        isOpen
+        STATE.menu.isOpen
     );
 
     menuToggle.setAttribute(
         "aria-expanded",
-        String(isOpen)
+        String(
+            STATE.menu.isOpen
+        )
     );
 
     menuToggle.setAttribute(
         "aria-label",
-        isOpen
+        STATE.menu.isOpen
             ? "메뉴 닫기"
             : "메뉴 열기"
     );
 
     menuToggle.textContent =
-        isOpen
+        STATE.menu.isOpen
             ? "×"
             : "☰";
 };
 
 
-menuToggle.addEventListener(
-    "click",
-    () => {
-        const isOpen =
-            !navList.classList.contains(
-                "active"
-            );
+/*
+    Menu Flow
 
-        setMenuState(isOpen);
+    Click
+    → STATE.menu.isOpen 변경
+    → renderMenu()
+    → class / aria 변경
+*/
+
+const setMenuState = (
+    isOpen
+) => {
+    STATE.menu.isOpen =
+        isOpen;
+
+    renderMenu();
+};
+
+
+const handleMenuToggle = () => {
+    setMenuState(
+        !STATE.menu.isOpen
+    );
+};
+
+
+const handleNavLinkClick = () => {
+    setMenuState(false);
+};
+
+
+const handleOutsideMenuClick = (
+    event
+) => {
+    if (
+        !STATE.menu.isOpen
+    ) {
+        return;
     }
-);
 
-
-navLinks.forEach(
-    (link) => {
-        link.addEventListener(
-            "click",
-            () => {
-                setMenuState(false);
-            }
-        );
+    if (
+        siteNav.contains(
+            event.target
+        )
+    ) {
+        return;
     }
-);
+
+    setMenuState(false);
+};
 
 
-document.addEventListener(
-    "click",
-    (event) => {
-        if (
-            !navList.classList.contains(
-                "active"
-            )
-        ) {
-            return;
-        }
-
-        if (
-            siteNav.contains(
-                event.target
-            )
-        ) {
-            return;
-        }
-
+const handleWindowResize = () => {
+    if (
+        window.innerWidth >=
+        TABLET_BREAKPOINT
+    ) {
         setMenuState(false);
     }
-);
+};
 
 
-window.addEventListener(
-    "resize",
-    () => {
-        if (
-            window.innerWidth >=
-            TABLET_BREAKPOINT
-        ) {
-            setMenuState(false);
-        }
+const handleEscapeKey = (
+    event
+) => {
+    if (
+        event.key !== "Escape" ||
+        !STATE.menu.isOpen
+    ) {
+        return;
     }
-);
 
+    setMenuState(false);
 
-document.addEventListener(
-    "keydown",
-    (event) => {
-        if (
-            event.key === "Escape" &&
-            navList.classList.contains(
-                "active"
-            )
-        ) {
-            setMenuState(false);
-
-            menuToggle.focus();
-        }
-    }
-);
+    menuToggle.focus();
+};
 
 
 // ==========================================================
 // SMOOTH SCROLL
 // ==========================================================
 
-internalLinks.forEach(
-    (link) => {
-        link.addEventListener(
-            "click",
-            (event) => {
-                const targetId =
-                    link.getAttribute("href");
+const handleInternalLinkClick = (
+    event
+) => {
+    const link =
+        event.currentTarget;
 
-                const target =
-                    document.querySelector(
-                        targetId
-                    );
+    const targetId =
+        link.getAttribute("href");
 
-                if (!target) {
-                    return;
-                }
-
-                event.preventDefault();
-
-                target.scrollIntoView({
-                    behavior:
-                        prefersReducedMotion
-                            ? "auto"
-                            : "smooth",
-
-                    block: "start",
-                });
-            }
+    const target =
+        document.querySelector(
+            targetId
         );
+
+    if (!target) {
+        return;
     }
-);
+
+    event.preventDefault();
+
+    target.scrollIntoView({
+        behavior:
+            prefersReducedMotion
+                ? "auto"
+                : "smooth",
+
+        block:
+            "start",
+    });
+};
 
 
 // ==========================================================
@@ -380,40 +508,39 @@ const updateScrollUI = () => {
 };
 
 
-window.addEventListener(
-    "scroll",
-    updateScrollUI,
-    {
-        passive: true,
-    }
-);
+const handleWindowScroll = () => {
+    updateScrollUI();
+};
+
+
+const handleScrollTopClick = () => {
+    window.scrollTo({
+        top:
+            0,
+
+        behavior:
+            prefersReducedMotion
+                ? "auto"
+                : "smooth",
+    });
+};
 
 
 updateScrollUI();
-
-
-scrollTopButton.addEventListener(
-    "click",
-    () => {
-        window.scrollTo({
-            top: 0,
-
-            behavior:
-                prefersReducedMotion
-                    ? "auto"
-                    : "smooth",
-        });
-    }
-);
 
 
 // ==========================================================
 // POINTER EFFECT
 // ==========================================================
 
-const updatePointerEffect = (event) => {
-    const x = `${event.clientX}px`;
-    const y = `${event.clientY}px`;
+const updatePointerEffect = (
+    event
+) => {
+    const x =
+        `${event.clientX}px`;
+
+    const y =
+        `${event.clientY}px`;
 
     document.documentElement
         .style
@@ -435,82 +562,113 @@ const updatePointerEffect = (event) => {
 };
 
 
-if (hasFinePointer) {
-    window.addEventListener(
-        "pointermove",
-        updatePointerEffect,
-        {
-            passive: true,
-        }
+const handlePointerMove = (
+    event
+) => {
+    updatePointerEffect(
+        event
     );
+};
 
-    document.documentElement.addEventListener(
-        "mouseleave",
-        () => {
-            pointerEffect.classList.remove(
-                "active"
-            );
-        }
+
+const handlePointerLeave = () => {
+    pointerEffect.classList.remove(
+        "active"
     );
-}
+};
 
 
 // ==========================================================
 // SCROLL REVEAL
 // ==========================================================
 
-if (
-    prefersReducedMotion ||
-    !(
-        "IntersectionObserver"
-        in window
-    )
-) {
-    revealElements.forEach(
-        (element) => {
-            element.classList.add(
-                "visible"
+const showRevealElement = (
+    element
+) => {
+    element.classList.add(
+        "visible"
+    );
+};
+
+
+const handleRevealEntries = (
+    entries,
+    observer
+) => {
+    /*
+        forEach:
+        IntersectionObserver가 전달한
+        각 요소의 상태를 순서대로 확인한다.
+    */
+
+    entries.forEach(
+        (entry) => {
+            if (
+                !entry.isIntersecting
+            ) {
+                return;
+            }
+
+            showRevealElement(
+                entry.target
+            );
+
+            observer.unobserve(
+                entry.target
             );
         }
     );
-} else {
-    const revealObserver =
-        new IntersectionObserver(
-            (entries) => {
-                entries.forEach(
-                    (entry) => {
-                        if (
-                            !entry.isIntersecting
-                        ) {
-                            return;
-                        }
+};
 
-                        entry.target
-                            .classList
-                            .add(
-                                "visible"
-                            );
 
-                        revealObserver.unobserve(
-                            entry.target
-                        );
-                    }
+const initializeRevealAnimation =
+    () => {
+        if (
+            prefersReducedMotion ||
+            !(
+                "IntersectionObserver"
+                in window
+            )
+        ) {
+            /*
+                forEach:
+                애니메이션을 사용할 수 없는 환경에서는
+                모든 요소를 즉시 표시한다.
+            */
+
+            revealElements.forEach(
+                showRevealElement
+            );
+
+            return;
+        }
+
+        const revealObserver =
+            new IntersectionObserver(
+                handleRevealEntries,
+                {
+                    threshold:
+                        REVEAL_THRESHOLD,
+                }
+            );
+
+        /*
+            forEach:
+            data-reveal 요소 각각을
+            IntersectionObserver의 감시 대상으로 등록한다.
+        */
+
+        revealElements.forEach(
+            (element) => {
+                revealObserver.observe(
+                    element
                 );
-            },
-            {
-                threshold:
-                    REVEAL_THRESHOLD,
             }
         );
+    };
 
-    revealElements.forEach(
-        (element) => {
-            revealObserver.observe(
-                element
-            );
-        }
-    );
-}
+
+initializeRevealAnimation();
 
 
 // ==========================================================
@@ -549,7 +707,9 @@ const showError = (
 };
 
 
-const clearError = (input) => {
+const clearError = (
+    input
+) => {
     input.classList.remove(
         "error"
     );
@@ -568,7 +728,8 @@ const clearError = (input) => {
             ".error-message"
         );
 
-    errorMessage.textContent = "";
+    errorMessage.textContent =
+        "";
 };
 
 
@@ -585,7 +746,9 @@ const validateName = () => {
         return false;
     }
 
-    clearError(nameInput);
+    clearError(
+        nameInput
+    );
 
     return true;
 };
@@ -605,7 +768,9 @@ const validateEmail = () => {
     }
 
     if (
-        !emailPattern.test(value)
+        !emailPattern.test(
+            value
+        )
     ) {
         showError(
             emailInput,
@@ -615,7 +780,9 @@ const validateEmail = () => {
         return false;
     }
 
-    clearError(emailInput);
+    clearError(
+        emailInput
+    );
 
     return true;
 };
@@ -634,7 +801,9 @@ const validateMessage = () => {
         return false;
     }
 
-    clearError(messageInput);
+    clearError(
+        messageInput
+    );
 
     return true;
 };
@@ -663,7 +832,8 @@ const validateForm = () => {
 // ==========================================================
 
 const clearFormStatus = () => {
-    formStatus.textContent = "";
+    formStatus.textContent =
+        "";
 
     formStatus.classList.remove(
         "success",
@@ -692,99 +862,111 @@ const setFormStatus = (
 };
 
 
-// ==========================================================
-// SUBMITTING STATE
-// ==========================================================
-
-const setSubmittingState = (
-    isSubmitting
-) => {
+const renderSubmittingState = () => {
     contactForm.classList.toggle(
         "is-submitting",
-        isSubmitting
+        STATE.contact.isSubmitting
     );
 
     contactForm.setAttribute(
         "aria-busy",
-        String(isSubmitting)
+        String(
+            STATE.contact.isSubmitting
+        )
     );
 
     /*
-        중요:
-        input을 disabled 하면
-        FormData에 포함되지 않는다.
+        input 자체는 disabled 하지 않는다.
+        disabled input은 FormData에서 제외되기 때문이다.
 
-        따라서 전송 중에는
-        submit 버튼만 비활성화한다.
+        전송 중에는 중복 Submit만 방지한다.
     */
 
     submitButton.disabled =
-        isSubmitting;
+        STATE.contact.isSubmitting;
 
     submitLabel.textContent =
-        isSubmitting
+        STATE.contact.isSubmitting
             ? "Sending..."
             : "Send Message";
 };
 
 
+const setSubmittingState = (
+    isSubmitting
+) => {
+    STATE.contact.isSubmitting =
+        isSubmitting;
+
+    renderSubmittingState();
+};
+
+
 // ==========================================================
-// FORM INPUT EVENTS
+// CONTACT INPUT EVENTS
 // ==========================================================
 
-nameInput.addEventListener(
-    "input",
-    () => {
-        clearFormStatus();
+const handleNameInput = () => {
+    clearFormStatus();
 
-        if (
-            nameInput.value.trim()
-        ) {
-            clearError(nameInput);
-        }
+    if (
+        nameInput.value.trim()
+    ) {
+        clearError(
+            nameInput
+        );
     }
-);
+};
 
 
-emailInput.addEventListener(
-    "input",
-    () => {
-        clearFormStatus();
+const handleEmailInput = () => {
+    clearFormStatus();
 
-        const value =
-            emailInput.value.trim();
+    const value =
+        emailInput.value.trim();
 
-        if (
-            emailPattern.test(value)
-        ) {
-            clearError(emailInput);
-        }
+    if (
+        emailPattern.test(
+            value
+        )
+    ) {
+        clearError(
+            emailInput
+        );
     }
-);
+};
 
 
-messageInput.addEventListener(
-    "input",
-    () => {
-        clearFormStatus();
+const handleMessageInput = () => {
+    clearFormStatus();
 
-        if (
-            messageInput.value.trim()
-        ) {
-            clearError(
-                messageInput
-            );
-        }
+    if (
+        messageInput.value.trim()
+    ) {
+        clearError(
+            messageInput
+        );
     }
-);
+};
 
 
 // ==========================================================
-// FORM SUBMIT
+// CONTACT FORM SUBMIT
 // ==========================================================
 
-contactForm.addEventListener(
-    "submit",
+/*
+    Contact Flow
+
+    Submit
+    → Validation
+    → FormData 생성
+    → STATE.contact.isSubmitting = true
+    → fetch()
+    → Success / Error
+    → STATE.contact.isSubmitting = false
+*/
+
+const handleContactSubmit =
     async (event) => {
         event.preventDefault();
 
@@ -824,10 +1006,8 @@ contactForm.addEventListener(
 
 
         /*
-            먼저 FormData를 생성한다.
-
-            현재 input들은 모두 활성 상태이므로
-            name / email / message가 정상적으로 들어간다.
+            FormData는 submit 상태 변경 전에 생성한다.
+            입력 데이터가 정상적으로 포함되도록 하기 위함이다.
         */
 
         const formData =
@@ -836,12 +1016,9 @@ contactForm.addEventListener(
             );
 
 
-        /*
-            중복 클릭 방지를 위해
-            FormData 생성 후 버튼을 비활성화한다.
-        */
-
-        setSubmittingState(true);
+        setSubmittingState(
+            true
+        );
 
 
         try {
@@ -849,9 +1026,11 @@ contactForm.addEventListener(
                 await fetch(
                     contactForm.action,
                     {
-                        method: "POST",
+                        method:
+                            "POST",
 
-                        body: formData,
+                        body:
+                            formData,
 
                         headers: {
                             Accept:
@@ -862,8 +1041,7 @@ contactForm.addEventListener(
 
 
             if (
-                response.status ===
-                429
+                response.status === 429
             ) {
                 throw new Error(
                     "RATE_LIMIT"
@@ -883,9 +1061,14 @@ contactForm.addEventListener(
                         Array.isArray(
                             data.errors
                         ) &&
-                        data.errors.length >
-                            0
+                        data.errors.length > 0
                     ) {
+                        /*
+                            map:
+                            Formspree의 errors 배열에서
+                            사용자에게 보여줄 message만 추출한다.
+                        */
+
                         message =
                             data.errors
                                 .map(
@@ -900,7 +1083,7 @@ contactForm.addEventListener(
                 } catch {
                     /*
                         JSON 응답이 아닌 경우
-                        기본 메시지 사용
+                        기본 메시지를 그대로 사용한다.
                     */
                 }
 
@@ -912,6 +1095,12 @@ contactForm.addEventListener(
 
             contactForm.reset();
 
+
+            /*
+                forEach:
+                이름 / 이메일 / 메시지 입력창의
+                에러 상태를 동일한 방식으로 초기화한다.
+            */
 
             [
                 nameInput,
@@ -928,7 +1117,11 @@ contactForm.addEventListener(
             );
 
         } catch (error) {
-            console.error(error);
+            console.error(
+                "[Contact Form Error]",
+                error
+            );
+
 
             if (
                 error.message ===
@@ -942,6 +1135,7 @@ contactForm.addEventListener(
                 return;
             }
 
+
             setFormStatus(
                 error.message ||
                 "메시지를 전송하지 못했습니다. 잠시 후 다시 시도해주세요.",
@@ -949,31 +1143,35 @@ contactForm.addEventListener(
             );
 
         } finally {
-            setSubmittingState(false);
+            setSubmittingState(
+                false
+            );
         }
-    }
-);
-
-
-// ==========================================================
-// GITHUB PROJECTS
-// ==========================================================
-
-let allRepositories = [];
-let currentProjectFilter = "ALL";
+    };
 
 
 // ==========================================================
 // ESCAPE HTML
 // ==========================================================
 
-const escapeHTML = (value) => {
+const escapeHTML = (
+    value
+) => {
     const entities = {
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        "\"": "&quot;",
-        "'": "&#039;",
+        "&":
+            "&amp;",
+
+        "<":
+            "&lt;",
+
+        ">":
+            "&gt;",
+
+        "\"":
+            "&quot;",
+
+        "'":
+            "&#039;",
     };
 
     return String(value).replace(
@@ -989,18 +1187,31 @@ const escapeHTML = (value) => {
 // ==========================================================
 
 const renderProjectFilters =
-    (repositories) => {
+    () => {
+        /*
+            map:
+            Repository 배열에서 language만 추출한다.
+
+            filter:
+            language가 null인 Repository를 제거한다.
+
+            Set:
+            중복 language를 제거한다.
+        */
 
         const languages = [
             ...new Set(
-                repositories
+                STATE.projects
+                    .repositories
                     .map(
                         ({
                             language,
                         }) =>
                             language
                     )
-                    .filter(Boolean)
+                    .filter(
+                        Boolean
+                    )
             ),
         ].sort(
             (
@@ -1019,13 +1230,18 @@ const renderProjectFilters =
         ];
 
 
+        /*
+            map:
+            필터 이름 배열을 HTML Button 문자열 배열로 변환한다.
+        */
+
         projectFilters.innerHTML =
             filters
                 .map(
                     (filter) => {
                         const isActive =
                             filter ===
-                            currentProjectFilter;
+                            STATE.projects.filter;
 
                         const label =
                             filter === "ALL"
@@ -1064,13 +1280,18 @@ const renderProjectFilters =
 // ==========================================================
 
 const hideProjectFilters = () => {
-    projectFilters.hidden = true;
+    projectFilters.hidden =
+        true;
 
-    projectFilters.innerHTML = "";
+    projectFilters.innerHTML =
+        "";
 };
 
 
 const renderLoading = () => {
+    STATE.projects.status =
+        "loading";
+
     hideProjectFilters();
 
     projectsList.setAttribute(
@@ -1087,6 +1308,9 @@ const renderLoading = () => {
 
 
 const renderEmpty = () => {
+    STATE.projects.status =
+        "empty";
+
     hideProjectFilters();
 
     projectsList.setAttribute(
@@ -1116,7 +1340,12 @@ const renderFilteredEmpty = () => {
 };
 
 
-const renderError = (message) => {
+const renderError = (
+    message
+) => {
+    STATE.projects.status =
+        "error";
+
     hideProjectFilters();
 
     projectsList.setAttribute(
@@ -1147,342 +1376,543 @@ const renderError = (message) => {
 // PROJECT CARDS
 // ==========================================================
 
-const renderProjects =
-    (repositories) => {
+const renderProjects = (
+    repositories
+) => {
+    STATE.projects.status =
+        "success";
 
-        projectsList.setAttribute(
-            "aria-busy",
-            "false"
+    projectsList.setAttribute(
+        "aria-busy",
+        "false"
+    );
+
+
+    /*
+        map:
+        Repository 객체 배열을
+        Project Card HTML 문자열 배열로 변환한다.
+    */
+
+    const cards =
+        repositories.map(
+            (
+                repository,
+                index
+            ) => {
+                const {
+                    name,
+                    description,
+                    html_url,
+                    language,
+                    stargazers_count,
+                    forks_count,
+                } =
+                    repository;
+
+
+                const safeName =
+                    escapeHTML(
+                        name
+                    );
+
+                const safeDescription =
+                    escapeHTML(
+                        description ||
+                        "프로젝트 설명이 없습니다."
+                    );
+
+                const safeLanguage =
+                    escapeHTML(
+                        language ||
+                        "Unknown"
+                    );
+
+                const safeUrl =
+                    escapeHTML(
+                        html_url
+                    );
+
+
+                return `
+                    <article class="project-card">
+
+                        <div class="project-card-top">
+
+                            <span class="project-depth">
+                                DEPTH ${String(index + 1).padStart(2, "0")}
+                            </span>
+
+                            <span class="project-language">
+                                ${safeLanguage}
+                            </span>
+
+                        </div>
+
+
+                        <h3>
+                            ${safeName}
+                        </h3>
+
+
+                        <p>
+                            ${safeDescription}
+                        </p>
+
+
+                        <div class="project-meta">
+
+                            <span>
+                                ★ ${stargazers_count}
+                            </span>
+
+                            <span>
+                                Fork ${forks_count}
+                            </span>
+
+                            <a
+                                href="${safeUrl}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                GitHub ↗
+                            </a>
+
+                        </div>
+
+                    </article>
+                `;
+            }
         );
 
 
-        const cards =
-            repositories.map(
-                (
-                    repository,
-                    index
-                ) => {
-
-                    const {
-                        name,
-                        description,
-                        html_url,
-                        language,
-                        stargazers_count,
-                        forks_count,
-                    } = repository;
-
-
-                    const safeName =
-                        escapeHTML(name);
-
-                    const safeDescription =
-                        escapeHTML(
-                            description ||
-                            "프로젝트 설명이 없습니다."
-                        );
-
-                    const safeLanguage =
-                        escapeHTML(
-                            language ||
-                            "Unknown"
-                        );
-
-                    const safeUrl =
-                        escapeHTML(
-                            html_url
-                        );
-
-
-                    return `
-                        <article class="project-card">
-
-                            <div class="project-card-top">
-
-                                <span class="project-depth">
-                                    DEPTH ${String(index + 1).padStart(2, "0")}
-                                </span>
-
-                                <span class="project-language">
-                                    ${safeLanguage}
-                                </span>
-
-                            </div>
-
-
-                            <h3>
-                                ${safeName}
-                            </h3>
-
-
-                            <p>
-                                ${safeDescription}
-                            </p>
-
-
-                            <div class="project-meta">
-
-                                <span>
-                                    ★ ${stargazers_count}
-                                </span>
-
-                                <span>
-                                    Fork ${forks_count}
-                                </span>
-
-                                <a
-                                    href="${safeUrl}"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    GitHub ↗
-                                </a>
-
-                            </div>
-
-                        </article>
-                    `;
-                }
-            );
-
-
-        projectsList.innerHTML =
-            cards.join("");
-    };
+    projectsList.innerHTML =
+        cards.join("");
+};
 
 
 // ==========================================================
 // FILTER PROJECTS
 // ==========================================================
 
-const renderFilteredProjects = () => {
-    const filteredRepositories =
-        currentProjectFilter === "ALL"
-            ? allRepositories
-            : allRepositories.filter(
-                ({
-                    language,
-                }) =>
-                    language ===
-                    currentProjectFilter
-            );
+const renderFilteredProjects =
+    () => {
+        /*
+            Project Filter Flow
+
+            Filter Button Click
+            → STATE.projects.filter 변경
+            → filter()
+            → renderProjects()
+        */
+
+        /*
+            filter:
+            사용자가 선택한 Language와 일치하는
+            Repository만 새 배열로 반환한다.
+        */
+
+        const filteredRepositories =
+            STATE.projects.filter ===
+            "ALL"
+
+                ? STATE.projects
+                    .repositories
+
+                : STATE.projects
+                    .repositories
+                    .filter(
+                        ({
+                            language,
+                        }) =>
+                            language ===
+                            STATE.projects.filter
+                    );
 
 
-    if (
-        filteredRepositories.length ===
-        0
-    ) {
-        renderFilteredEmpty();
+        if (
+            filteredRepositories.length ===
+            0
+        ) {
+            renderFilteredEmpty();
 
-        return;
-    }
+            return;
+        }
 
 
-    renderProjects(
-        filteredRepositories
-    );
-};
+        renderProjects(
+            filteredRepositories
+        );
+    };
 
 
 // ==========================================================
 // FETCH PROJECTS
 // ==========================================================
 
-const fetchProjects = async () => {
-    renderLoading();
+/*
+    GitHub API Flow
+
+    fetchProjects()
+    → Loading
+    → API Request
+    → STATE.projects.repositories 저장
+    → Filter Rendering
+    → Project Rendering
+
+    실패 시
+    → Error State
+    → Retry UI
+*/
+
+const fetchProjects =
+    async () => {
+        renderLoading();
 
 
-    try {
-        const response =
-            await fetch(
-                GITHUB_API_URL
+        try {
+            const response =
+                await fetch(
+                    GITHUB_API_URL
+                );
+
+
+            if (
+                response.status === 403 ||
+                response.status === 429
+            ) {
+                console.error(
+                    `[GitHub API] Rate Limit Error (${response.status})`
+                );
+
+                throw new Error(
+                    "RATE_LIMIT"
+                );
+            }
+
+
+            if (
+                response.status === 404
+            ) {
+                console.error(
+                    "[GitHub API] User Not Found (404)"
+                );
+
+                throw new Error(
+                    "NOT_FOUND"
+                );
+            }
+
+
+            if (!response.ok) {
+                console.error(
+                    `[GitHub API] HTTP Error (${response.status})`
+                );
+
+                throw new Error(
+                    `HTTP_${response.status}`
+                );
+            }
+
+
+            const repositories =
+                await response.json();
+
+
+            if (
+                !Array.isArray(
+                    repositories
+                )
+            ) {
+                console.error(
+                    "[GitHub API] Invalid Response Data"
+                );
+
+                throw new Error(
+                    "INVALID_DATA"
+                );
+            }
+
+
+            if (
+                repositories.length ===
+                0
+            ) {
+                STATE.projects.repositories =
+                    [];
+
+                renderEmpty();
+
+                return;
+            }
+
+
+            /*
+                API 결과를 STATE에 저장한다.
+                이후 UI는 STATE를 기준으로 렌더링한다.
+            */
+
+            STATE.projects.repositories =
+                repositories;
+
+            STATE.projects.filter =
+                "ALL";
+
+
+            renderProjectFilters();
+
+            renderFilteredProjects();
+
+        } catch (error) {
+            console.error(
+                "[GitHub API Error]",
+                error
             );
 
 
-        if (
-            response.status === 403 ||
-            response.status === 429
-        ) {
-            throw new Error(
+            if (
+                error.message ===
                 "RATE_LIMIT"
-            );
-        }
+            ) {
+                renderError(
+                    "GitHub API 요청 한도를 초과했습니다. 잠시 후 다시 시도해주세요."
+                );
+
+                return;
+            }
 
 
-        if (
-            response.status === 404
-        ) {
-            throw new Error(
+            if (
+                error.message ===
                 "NOT_FOUND"
-            );
-        }
+            ) {
+                renderError(
+                    "GitHub 사용자를 찾을 수 없습니다."
+                );
+
+                return;
+            }
 
 
-        if (!response.ok) {
-            throw new Error(
-                `HTTP_${response.status}`
-            );
-        }
-
-
-        const repositories =
-            await response.json();
-
-
-        if (
-            !Array.isArray(
-                repositories
-            )
-        ) {
-            throw new Error(
-                "INVALID_DATA"
-            );
-        }
-
-
-        if (
-            repositories.length === 0
-        ) {
-            allRepositories = [];
-
-            renderEmpty();
-
-            return;
-        }
-
-
-        allRepositories =
-            repositories;
-
-        currentProjectFilter =
-            "ALL";
-
-
-        renderProjectFilters(
-            allRepositories
-        );
-
-
-        renderFilteredProjects();
-
-    } catch (error) {
-        console.error(error);
-
-
-        if (
-            error.message ===
-            "RATE_LIMIT"
-        ) {
             renderError(
-                "GitHub API 요청 한도를 초과했습니다. 잠시 후 다시 시도해주세요."
+                "프로젝트를 불러올 수 없습니다."
             );
-
-            return;
         }
+    };
 
 
-        if (
-            error.message ===
-            "NOT_FOUND"
-        ) {
-            renderError(
-                "GitHub 사용자를 찾을 수 없습니다."
-            );
+// ==========================================================
+// PROJECT EVENTS
+// ==========================================================
 
-            return;
-        }
-
-
-        renderError(
-            "프로젝트를 불러올 수 없습니다."
-        );
+const handleProjectFilterClick = (
+    event
+) => {
+    if (
+        !(
+            event.target
+            instanceof Element
+        )
+    ) {
+        return;
     }
+
+
+    const filterButton =
+        event.target.closest(
+            ".project-filter"
+        );
+
+
+    if (!filterButton) {
+        return;
+    }
+
+
+    /*
+        1. 이벤트
+        2. STATE 변경
+        3. 필터 UI 렌더링
+        4. 프로젝트 재렌더링
+    */
+
+    STATE.projects.filter =
+        decodeURIComponent(
+            filterButton
+                .dataset
+                .filter
+        );
+
+
+    renderProjectFilters();
+
+    renderFilteredProjects();
+};
+
+
+const handleProjectsListClick = (
+    event
+) => {
+    if (
+        !(
+            event.target
+            instanceof Element
+        )
+    ) {
+        return;
+    }
+
+
+    const retryButton =
+        event.target.closest(
+            ".retry-projects"
+        );
+
+
+    if (!retryButton) {
+        return;
+    }
+
+
+    fetchProjects();
 };
 
 
 // ==========================================================
-// FILTER EVENT
+// EVENT REGISTRATION
 // ==========================================================
 
-projectFilters.addEventListener(
+/*
+    이벤트 처리 함수를 별도로 명명해
+    각 이벤트의 역할을 쉽게 추적할 수 있도록 구성한다.
+*/
+
+
+// Theme
+themeToggle.addEventListener(
     "click",
-    (event) => {
+    handleThemeToggle
+);
 
-        if (
-            !(
-                event.target
-                instanceof Element
-            )
-        ) {
-            return;
-        }
+systemThemeQuery.addEventListener(
+    "change",
+    handleSystemThemeChange
+);
 
 
-        const filterButton =
-            event.target.closest(
-                ".project-filter"
-            );
+// Navigation
+menuToggle.addEventListener(
+    "click",
+    handleMenuToggle
+);
 
-
-        if (!filterButton) {
-            return;
-        }
-
-
-        currentProjectFilter =
-            decodeURIComponent(
-                filterButton
-                    .dataset
-                    .filter
-            );
-
-
-        renderProjectFilters(
-            allRepositories
+navLinks.forEach(
+    (link) => {
+        link.addEventListener(
+            "click",
+            handleNavLinkClick
         );
+    }
+);
+
+document.addEventListener(
+    "click",
+    handleOutsideMenuClick
+);
+
+document.addEventListener(
+    "keydown",
+    handleEscapeKey
+);
+
+window.addEventListener(
+    "resize",
+    handleWindowResize
+);
 
 
-        renderFilteredProjects();
+// Smooth Scroll
+internalLinks.forEach(
+    (link) => {
+        link.addEventListener(
+            "click",
+            handleInternalLinkClick
+        );
     }
 );
 
 
-// ==========================================================
-// RETRY EVENT
-// ==========================================================
+// Scroll
+window.addEventListener(
+    "scroll",
+    handleWindowScroll,
+    {
+        passive:
+            true,
+    }
+);
+
+scrollTopButton.addEventListener(
+    "click",
+    handleScrollTopClick
+);
+
+
+// Pointer
+if (hasFinePointer) {
+    window.addEventListener(
+        "pointermove",
+        handlePointerMove,
+        {
+            passive:
+                true,
+        }
+    );
+
+    document.documentElement
+        .addEventListener(
+            "mouseleave",
+            handlePointerLeave
+        );
+}
+
+
+// Contact
+nameInput.addEventListener(
+    "input",
+    handleNameInput
+);
+
+emailInput.addEventListener(
+    "input",
+    handleEmailInput
+);
+
+messageInput.addEventListener(
+    "input",
+    handleMessageInput
+);
+
+contactForm.addEventListener(
+    "submit",
+    handleContactSubmit
+);
+
+
+// Projects
+projectFilters.addEventListener(
+    "click",
+    handleProjectFilterClick
+);
 
 projectsList.addEventListener(
     "click",
-    (event) => {
-
-        if (
-            !(
-                event.target
-                instanceof Element
-            )
-        ) {
-            return;
-        }
-
-
-        const retryButton =
-            event.target.closest(
-                ".retry-projects"
-            );
-
-
-        if (!retryButton) {
-            return;
-        }
-
-
-        fetchProjects();
-    }
+    handleProjectsListClick
 );
 
 
 // ==========================================================
-// INITIAL PROJECT LOAD
+// INITIALIZE
 // ==========================================================
 
 fetchProjects();

@@ -30,6 +30,9 @@
 
     <!-- ==================================================
          Pool Lane Background
+
+         장식 목적의 요소이므로
+         스크린리더가 읽지 않도록 aria-hidden 적용
     =================================================== -->
     <div
         class="pool-background"
@@ -45,6 +48,9 @@
 
 
     <!--
+        장식용 Pointer Effect.
+        정보 전달 목적이 없으므로 aria-hidden 적용.
+
         Light Mode → 물결 / 수면 반사
         Dark Mode  → 조명 / 윤슬
     -->
@@ -55,10 +61,19 @@
 
 
     <!-- ==================================================
-         Header
+         Header Landmark
+
+         사이트의 전역 Navigation을 포함하는 영역
     =================================================== -->
     <header class="site-header">
 
+        <!--
+            페이지의 주요 Section 이동을 담당하는
+            Navigation Landmark.
+
+            aria-label을 통해 다른 Navigation과
+            목적을 구분한다.
+        -->
         <nav
             class="site-nav"
             aria-label="메인 내비게이션"
@@ -136,7 +151,12 @@
 
 
     <!-- ==================================================
-         Main
+         Main Landmark
+
+         포트폴리오의 핵심 콘텐츠를 포함한다.
+
+         각 Section은 aria-labelledby를 사용해
+         Section 제목과 Landmark를 연결한다.
     =================================================== -->
     <main id="main-content">
 
@@ -165,6 +185,13 @@
 
                     <br>
 
+
+                    <!--
+                        시각적인 Typing Animation 영역.
+
+                        동일한 완성 문장을 아래 sr-only에 제공하므로
+                        애니메이션 자체는 스크린리더에서 제외한다.
+                    -->
                     <span
                         class="hero-typing-line"
                         aria-hidden="true"
@@ -183,6 +210,10 @@
                     </span>
 
 
+                    <!--
+                        스크린리더 사용자는
+                        타이핑 과정이 아닌 완성된 문장을 바로 읽는다.
+                    -->
                     <span class="sr-only">
                         서비스의 흐름을 설계합니다.
                     </span>
@@ -215,7 +246,9 @@
 
 
         <!-- ==================================================
-             About
+             About Section
+
+             aria-labelledby로 Section 제목과 연결
         =================================================== -->
         <section
             class="section about"
@@ -232,9 +265,11 @@
                     SECTION 01 / ABOUT
                 </p>
 
+
                 <h2 id="about-title">
                     Poolside Introduction
                 </h2>
+
 
                 <p>
                     클라이언트 개발에서 시작해 더 넓은 서비스 개발로
@@ -289,7 +324,9 @@
 
 
         <!-- ==================================================
-             Skills
+             Skills Section
+
+             aria-labelledby로 Section 제목과 연결
         =================================================== -->
         <section
             class="section skills"
@@ -306,9 +343,11 @@
                     SECTION 02 / SKILLS
                 </p>
 
+
                 <h2 id="skills-title">
                     Structured Lanes
                 </h2>
+
 
                 <p>
                     서로 다른 레인에서 쌓아온 개발 경험
@@ -318,6 +357,7 @@
 
 
             <div class="skills-grid">
+
 
                 <!-- LANE 01 -->
                 <article
@@ -586,7 +626,10 @@
 
 
         <!-- ==================================================
-             Projects
+             Projects Section
+
+             GitHub API 결과를 동적으로 제공하는 영역.
+             aria-live로 상태 변경을 보조 기술에 전달한다.
         =================================================== -->
         <section
             class="section projects"
@@ -616,6 +659,10 @@
             </header>
 
 
+            <!--
+                프로젝트 언어 필터는 동일한 목적의 버튼 묶음이므로
+                role="group"과 aria-label을 사용한다.
+            -->
             <div
                 class="project-filters"
                 id="project-filters"
@@ -642,7 +689,9 @@
 
 
         <!-- ==================================================
-             Contact
+             Contact Section
+
+             입력 오류와 전송 상태를 aria-live로 전달한다.
         =================================================== -->
         <section
             class="section contact"
@@ -672,12 +721,6 @@
             </header>
 
 
-            <!--
-                Formspree 설정
-
-                YOUR_FORM_ID 부분만
-                Formspree에서 발급받은 ID로 변경
-            -->
             <form
                 class="contact-form"
                 id="contact-form"
@@ -693,6 +736,7 @@
                         이름
                     </label>
 
+
                     <input
                         type="text"
                         id="name"
@@ -701,6 +745,7 @@
                         aria-describedby="name-error"
                         required
                     >
+
 
                     <p
                         class="error-message"
@@ -717,6 +762,7 @@
                         이메일
                     </label>
 
+
                     <input
                         type="email"
                         id="email"
@@ -725,6 +771,7 @@
                         aria-describedby="email-error"
                         required
                     >
+
 
                     <p
                         class="error-message"
@@ -741,6 +788,7 @@
                         메시지
                     </label>
 
+
                     <textarea
                         id="message"
                         name="message"
@@ -748,6 +796,7 @@
                         aria-describedby="message-error"
                         required
                     ></textarea>
+
 
                     <p
                         class="error-message"
@@ -768,6 +817,10 @@
                 </button>
 
 
+                <!--
+                    Form 전송 성공 / 실패 상태를
+                    스크린리더 사용자에게 전달한다.
+                -->
                 <p
                     class="form-status"
                     aria-live="polite"
@@ -782,6 +835,9 @@
 
     <!-- ==================================================
          Scroll Top
+
+         아이콘 자체보다 버튼의 목적이 중요하므로
+         aria-label로 기능을 설명한다.
     =================================================== -->
     <button
         class="scroll-top"
@@ -793,9 +849,14 @@
 
 
     <!-- ==================================================
-         Footer
+         Footer Landmark
+
+         저작권 정보와 외부 프로필 탐색 영역을 제공한다.
     =================================================== -->
-    <footer class="site-footer">
+    <footer
+        class="site-footer"
+        aria-label="사이트 정보"
+    >
 
         <p>
             &copy; 2026 NaHyeon Kim.
@@ -803,7 +864,17 @@
         </p>
 
 
-        <div class="social-links">
+        <!--
+            Footer 내부에서 외부 프로필 이동을 담당하는
+            별도의 Navigation Landmark.
+
+            메인 내비게이션과 목적을 구분하기 위해
+            aria-label="소셜 링크"를 사용한다.
+        -->
+        <nav
+            class="social-links"
+            aria-label="소셜 링크"
+        >
 
             <a
                 href="https://github.com/yhana972"
@@ -813,7 +884,7 @@
                 GitHub
             </a>
 
-        </div>
+        </nav>
 
     </footer>
 
