@@ -72,8 +72,8 @@ const projectFilters =
 // CONFIG
 // ==========================================================
 
-const GITHUB_USERNAME =
-    "yhana972";
+const GITHUB_USERNAME = "yhana972";
+//const GITHUB_USERNAME = "this-user-does-not-exist-test";
 
 const GITHUB_API_URL =
     `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&direction=desc&per_page=30`;

@@ -74,7 +74,8 @@ Project 영역은 CSS Grid의 `auto-fit`, `minmax()`를 사용해 화면 폭에 
 ## 검증 스크린샷
 
 ### 375px
-![Responsive 375](images/readme/responsive-375.png)
+Chrome DevTools에서 Viewport Width를 `375px`로 설정해 확인했습니다.
+![Responsive 375](images/readme/mobile.png)
 
 ### 768px
 ![Responsive 768](images/readme/responsive-768.png)
@@ -278,6 +279,8 @@ GitHub 사용자를 찾을 수 없습니다.
 ```
 
 테스트 후 실제 Username으로 복구합니다.
+
+![GitHub API 404 Error Test](images/readme/api-error-404.png)
 
 ## 403 — Rate Limit
 
