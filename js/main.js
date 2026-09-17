@@ -97,6 +97,33 @@ const prefersReducedMotion =
 
 
 // ==========================================================
+// SYSTEM THEME
+// ==========================================================
+
+/*
+    운영체제 / 브라우저의 테마 설정 확인
+
+    true
+    → 시스템 Dark Mode
+
+    false
+    → 시스템 Light Mode
+*/
+
+const systemThemeQuery =
+    window.matchMedia(
+        "(prefers-color-scheme: dark)"
+    );
+
+
+const getSystemTheme = () => {
+    return systemThemeQuery.matches
+        ? "dark"
+        : "light";
+};
+
+
+// ==========================================================
 // THEME
 // ==========================================================
 
@@ -132,23 +159,69 @@ const applyTheme = (theme) => {
         theme;
 
 
-    updateThemeButton(theme);
+    updateThemeButton(
+        theme
+    );
 };
 
 
-const savedTheme =
-    localStorage.getItem("theme");
+/*
+    이전에 사용자가 직접 선택한 테마 확인
+*/
 
+const savedTheme =
+    localStorage.getItem(
+        "theme"
+    );
+
+
+/*
+    localStorage에
+    정상적인 테마 값이 있는지 확인
+*/
+
+const hasSavedTheme =
+    savedTheme === "dark" ||
+    savedTheme === "light";
+
+
+/*
+    우선순위
+
+    1. 사용자가 저장한 Theme
+    2. 시스템 Theme
+*/
 
 let currentTheme =
-    savedTheme === "dark" ||
-    savedTheme === "light"
+    hasSavedTheme
         ? savedTheme
-        : "light";
+        : getSystemTheme();
 
 
-applyTheme(currentTheme);
+/*
+    사용자가 직접 테마를 선택했는지 여부.
 
+    true가 되면
+    시스템 테마가 변경되어도
+    사용자 설정을 우선한다.
+*/
+
+let hasUserThemePreference =
+    hasSavedTheme;
+
+
+/*
+    최초 Theme 적용
+*/
+
+applyTheme(
+    currentTheme
+);
+
+
+// ==========================================================
+// THEME BUTTON
+// ==========================================================
 
 themeToggle.addEventListener(
     "click",
@@ -159,6 +232,16 @@ themeToggle.addEventListener(
                 : "light";
 
 
+        /*
+            사용자가 직접 Theme를 선택했으므로
+            이후에는 시스템 설정보다
+            사용자 설정을 우선한다.
+        */
+
+        hasUserThemePreference =
+            true;
+
+
         applyTheme(
             currentTheme
         );
@@ -166,6 +249,46 @@ themeToggle.addEventListener(
 
         localStorage.setItem(
             "theme",
+            currentTheme
+        );
+    }
+);
+
+
+// ==========================================================
+// SYSTEM THEME CHANGE
+// ==========================================================
+
+/*
+    사용자가 직접 테마를 고르지 않은 상태에서
+    OS Theme가 변경되면 사이트도 함께 변경된다.
+
+    예:
+    Mac Light
+    ↓
+    Mac Dark
+
+    Portfolio도
+    Day Pool → Night Pool
+*/
+
+systemThemeQuery.addEventListener(
+    "change",
+    (event) => {
+        if (
+            hasUserThemePreference
+        ) {
+            return;
+        }
+
+
+        currentTheme =
+            event.matches
+                ? "dark"
+                : "light";
+
+
+        applyTheme(
             currentTheme
         );
     }
@@ -895,6 +1018,16 @@ const escapeHTML =
 const renderProjectFilters =
     (repositories) => {
 
+        /*
+            모든 Repository의 language 추출
+            ↓
+            null 제거
+            ↓
+            Set으로 중복 제거
+            ↓
+            다시 Array로 변경
+        */
+
         const languages =
             [
                 ...new Set(
@@ -1192,6 +1325,15 @@ const renderProjects =
 
 const renderFilteredProjects =
     () => {
+
+        /*
+            선택 미션 핵심
+
+            ALL이면 전체 사용
+
+            아니면 filter()를 사용해서
+            선택된 언어와 같은 Repository만 반환
+        */
 
         const filteredRepositories =
             currentProjectFilter ===
