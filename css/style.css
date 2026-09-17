@@ -101,9 +101,6 @@
     --transition:
         0.3s ease;
 
-
-    /* Pointer */
-
     --pointer-x: 50vw;
     --pointer-y: 50vh;
 }
@@ -133,7 +130,6 @@
     --color-error: #ff8a86;
     --color-success: #77d7bc;
 
-
     --lane-base:
         rgba(101, 183, 191, 0.055);
 
@@ -145,7 +141,6 @@
 
     --lane-red:
         rgba(174, 100, 93, 0.12);
-
 
     --background-main:
         radial-gradient(
@@ -242,6 +237,7 @@ body {
 
 a {
     color: inherit;
+
     text-decoration: none;
 }
 
@@ -263,6 +259,7 @@ img {
     display: block;
 
     max-width: 100%;
+
     height: auto;
 }
 
@@ -283,7 +280,9 @@ img {
     overflow: hidden;
 
     clip: rect(0, 0, 0, 0);
-    clip-path: inset(50%);
+
+    clip-path:
+        inset(50%);
 
     white-space: nowrap;
 
@@ -295,9 +294,11 @@ a:focus-visible,
 input:focus-visible,
 textarea:focus-visible {
     outline:
-        3px solid var(--focus-ring);
+        3px solid
+        var(--focus-ring);
 
-    outline-offset: 3px;
+    outline-offset:
+        3px;
 }
 
 ::selection {
@@ -351,18 +352,15 @@ section[id] {
     top: 0;
 
     width: 1px;
+
     height: 100%;
 
     background:
         linear-gradient(
             to bottom,
-
             transparent 0%,
-
             var(--lane-base) 8%,
-
             var(--lane-base) 92%,
-
             transparent 100%
         );
 }
@@ -376,6 +374,7 @@ section[id] {
     left: 50%;
 
     width: 3px;
+
     height: 100%;
 
     transform:
@@ -413,24 +412,29 @@ section[id] {
             transparent 452px
         );
 
-    opacity: 0.66;
+    opacity:
+        0.66;
 }
 
 .lane-line:nth-child(2)::after {
-    background-position-y: 31px;
+    background-position-y:
+        31px;
 }
 
 .lane-line:nth-child(3)::after {
-    background-position-y: 79px;
+    background-position-y:
+        79px;
 }
 
 .lane-line:nth-child(4)::after {
-    background-position-y: 45px;
+    background-position-y:
+        45px;
 }
 
 .lane-line:nth-child(1),
 .lane-line:nth-child(4) {
-    opacity: 0.40;
+    opacity:
+        0.40;
 }
 
 
@@ -512,8 +516,11 @@ section[id] {
     top:
         var(--pointer-y);
 
-    width: 70px;
-    height: 70px;
+    width:
+        70px;
+
+    height:
+        70px;
 
     border:
         1px solid
@@ -524,7 +531,8 @@ section[id] {
             0.22
         );
 
-    border-radius: 50%;
+    border-radius:
+        50%;
 
     opacity: 0;
 
@@ -550,8 +558,11 @@ section[id] {
     top:
         var(--pointer-y);
 
-    width: 110px;
-    height: 110px;
+    width:
+        110px;
+
+    height:
+        110px;
 
     border:
         1px solid
@@ -562,7 +573,8 @@ section[id] {
             0.14
         );
 
-    border-radius: 50%;
+    border-radius:
+        50%;
 
     opacity: 0;
 
@@ -579,12 +591,11 @@ section[id] {
 }
 
 
-/* Night */
+/* Night Pointer */
 
 [data-theme="dark"]
 .pointer-effect {
     background:
-
         radial-gradient(
             circle 220px
             at
@@ -610,7 +621,6 @@ section[id] {
             ellipse
             300px
             140px
-
             at
             var(--pointer-x)
             var(--pointer-y),
@@ -661,7 +671,6 @@ main,
         0 28px;
 
     transition:
-
         opacity
         0.8s
         ease
@@ -676,15 +685,18 @@ main,
 [data-reveal].visible {
     opacity: 1;
 
-    translate: 0 0;
+    translate:
+        0 0;
 }
 
 .skill-card:nth-child(2) {
-    --reveal-delay: 0.1s;
+    --reveal-delay:
+        0.1s;
 }
 
 .skill-card:nth-child(3) {
-    --reveal-delay: 0.2s;
+    --reveal-delay:
+        0.2s;
 }
 
 
@@ -713,7 +725,6 @@ main,
         blur(14px);
 
     transition:
-
         background-color
         var(--transition),
 
@@ -791,8 +802,11 @@ main,
 }
 
 .logo-dot {
-    width: 8px;
-    height: 8px;
+    width:
+        8px;
+
+    height:
+        8px;
 
     flex:
         0 0 auto;
@@ -815,7 +829,7 @@ main,
 
 
 /* =========================================================
-   MOBILE NAV
+   MOBILE NAVIGATION
 ========================================================= */
 
 .nav-list {
@@ -898,8 +912,11 @@ main,
 
 .theme-toggle,
 .menu-toggle {
-    width: 42px;
-    height: 42px;
+    width:
+        42px;
+
+    height:
+        42px;
 
     flex:
         0 0 auto;
@@ -922,7 +939,6 @@ main,
         var(--color-text);
 
     transition:
-
         transform
         var(--transition),
 
@@ -957,13 +973,15 @@ main,
 
     align-items: center;
 
-    justify-content: center;
+    justify-content:
+        center;
 
     padding:
         var(--space-xl)
         var(--space-md);
 
-    text-align: center;
+    text-align:
+        center;
 }
 
 .hero-content {
@@ -978,7 +996,8 @@ main,
     flex-direction:
         column;
 
-    align-items: center;
+    align-items:
+        center;
 }
 
 .hero-eyebrow {
@@ -1116,7 +1135,6 @@ main,
         600;
 
     transition:
-
         transform
         var(--transition),
 
@@ -1161,7 +1179,8 @@ main,
     padding:
         5rem 0;
 
-    position: relative;
+    position:
+        relative;
 }
 
 .section-header {
@@ -1218,9 +1237,11 @@ main,
 .about-content {
     display: grid;
 
-    gap: 2rem;
+    gap:
+        2rem;
 
-    align-items: center;
+    align-items:
+        center;
 }
 
 .profile {
@@ -1233,22 +1254,28 @@ main,
     margin:
         0 auto;
 
-    position: relative;
+    position:
+        relative;
 
-    isolation: isolate;
+    isolation:
+        isolate;
 }
 
 .profile img {
-    width: 100%;
+    width:
+        100%;
 
     aspect-ratio:
         1 / 1;
 
-    position: relative;
+    position:
+        relative;
 
-    z-index: 1;
+    z-index:
+        1;
 
-    object-fit: cover;
+    object-fit:
+        cover;
 
     border:
         1px solid
@@ -1264,7 +1291,8 @@ main,
 .profile::before {
     content: "";
 
-    position: absolute;
+    position:
+        absolute;
 
     inset:
         12%
@@ -1272,7 +1300,8 @@ main,
         -8%
         12%;
 
-    z-index: 0;
+    z-index:
+        0;
 
     border-radius:
         var(--radius-md);
@@ -1280,14 +1309,12 @@ main,
     background:
         linear-gradient(
             135deg,
-
             rgba(
                 40,
                 199,
                 194,
                 0.20
             ),
-
             rgba(
                 79,
                 184,
@@ -1331,7 +1358,8 @@ main,
 }
 
 .skill-card {
-    min-width: 0;
+    min-width:
+        0;
 
     margin-inline:
         clamp(
@@ -1363,7 +1391,6 @@ main,
         var(--shadow-soft);
 
     transition:
-
         opacity
         0.8s
         ease
@@ -1398,7 +1425,8 @@ main,
 .skill-card-header {
     display: flex;
 
-    align-items: center;
+    align-items:
+        center;
 
     justify-content:
         space-between;
@@ -1428,19 +1456,24 @@ main,
     color:
         var(--color-text-muted);
 
-    text-align: right;
+    text-align:
+        right;
 }
 
 .skill-icon {
-    width: 48px;
-    height: 48px;
+    width:
+        48px;
+
+    height:
+        48px;
 
     margin-bottom:
         1.2rem;
 
     display: grid;
 
-    place-items: center;
+    place-items:
+        center;
 
     border:
         1px solid
@@ -1523,7 +1556,8 @@ main,
 .project-filters {
     display: flex;
 
-    flex-wrap: wrap;
+    flex-wrap:
+        wrap;
 
     gap:
         0.65rem;
@@ -1533,7 +1567,8 @@ main,
 }
 
 .project-filters[hidden] {
-    display: none;
+    display:
+        none;
 }
 
 .project-filter {
@@ -1564,7 +1599,6 @@ main,
         600;
 
     transition:
-
         transform
         var(--transition),
 
@@ -1616,22 +1650,33 @@ main,
 
 /* =========================================================
    PROJECTS
+
+   미션 요구사항:
+   Grid + auto-fit + minmax()
 ========================================================= */
 
 .projects-grid {
     display: grid;
 
     grid-template-columns:
-        minmax(0, 1fr);
+        repeat(
+            auto-fit,
+            minmax(
+                min(100%, 300px),
+                1fr
+            )
+        );
 
     gap:
         2rem 0;
 }
 
 .project-card {
-    min-width: 0;
+    min-width:
+        0;
 
-    min-height: 260px;
+    min-height:
+        260px;
 
     margin-inline:
         clamp(
@@ -1668,7 +1713,6 @@ main,
         var(--shadow-soft);
 
     transition:
-
         transform
         var(--transition),
 
@@ -1693,7 +1737,8 @@ main,
 .project-card-top {
     display: flex;
 
-    align-items: center;
+    align-items:
+        center;
 
     justify-content:
         space-between;
@@ -1723,7 +1768,8 @@ main,
     color:
         var(--color-text-muted);
 
-    text-align: right;
+    text-align:
+        right;
 }
 
 .project-card h3 {
@@ -1757,9 +1803,11 @@ main,
 
     display: flex;
 
-    align-items: center;
+    align-items:
+        center;
 
-    flex-wrap: wrap;
+    flex-wrap:
+        wrap;
 
     gap:
         var(--space-md);
@@ -1810,7 +1858,8 @@ main,
         3rem
         1.5rem;
 
-    text-align: center;
+    text-align:
+        center;
 
     color:
         var(--color-text-muted);
@@ -1827,7 +1876,8 @@ main,
 }
 
 .retry-projects {
-    margin-top: 1rem;
+    margin-top:
+        1rem;
 
     padding:
         0.7rem
@@ -1869,7 +1919,8 @@ main,
 }
 
 .contact-form {
-    width: 100%;
+    width:
+        100%;
 
     max-width:
         760px;
@@ -1908,7 +1959,8 @@ main,
     flex-direction:
         column;
 
-    gap: 0.5rem;
+    gap:
+        0.5rem;
 }
 
 .form-field label {
@@ -1924,7 +1976,8 @@ main,
 
 .form-field input,
 .form-field textarea {
-    width: 100%;
+    width:
+        100%;
 
     padding:
         0.9rem
@@ -1944,9 +1997,14 @@ main,
         var(--color-text);
 
     transition:
-        border-color var(--transition),
-        box-shadow var(--transition),
-        background-color var(--transition);
+        border-color
+        var(--transition),
+
+        box-shadow
+        var(--transition),
+
+        background-color
+        var(--transition);
 }
 
 .form-field input:focus,
@@ -1957,7 +2015,8 @@ main,
     background:
         var(--input-focus-bg);
 
-    outline: none;
+    outline:
+        none;
 
     box-shadow:
         0 0 0 3px
@@ -1986,17 +2045,10 @@ main,
         0.8rem;
 }
 
-.form-field
-input.error,
-
-.form-field
-textarea.error,
-
-.form-field
-input[aria-invalid="true"],
-
-.form-field
-textarea[aria-invalid="true"] {
+.form-field input.error,
+.form-field textarea.error,
+.form-field input[aria-invalid="true"],
+.form-field textarea[aria-invalid="true"] {
     border-color:
         var(--color-error);
 }
@@ -2030,9 +2082,14 @@ button[type="submit"] {
         700;
 
     transition:
-        opacity var(--transition),
-        transform var(--transition),
-        box-shadow var(--transition);
+        opacity
+        var(--transition),
+
+        transform
+        var(--transition),
+
+        box-shadow
+        var(--transition);
 }
 
 .contact-form
@@ -2140,7 +2197,8 @@ textarea {
 ========================================================= */
 
 .scroll-top {
-    position: fixed;
+    position:
+        fixed;
 
     right:
         1.5rem;
@@ -2148,12 +2206,16 @@ textarea {
     bottom:
         1.5rem;
 
-    width: 46px;
-    height: 46px;
+    width:
+        46px;
+
+    height:
+        46px;
 
     display: grid;
 
-    place-items: center;
+    place-items:
+        center;
 
     border:
         1px solid
@@ -2168,20 +2230,25 @@ textarea {
     color:
         var(--color-aqua-deep);
 
-    opacity: 0;
+    opacity:
+        0;
 
-    visibility: hidden;
+    visibility:
+        hidden;
 
     transform:
         translateY(10px);
 
-    z-index: 90;
+    z-index:
+        90;
 }
 
 .scroll-top.active {
-    opacity: 1;
+    opacity:
+        1;
 
-    visibility: visible;
+    visibility:
+        visible;
 
     transform:
         translateY(0);
@@ -2196,23 +2263,33 @@ textarea {
 
     .lane-line:nth-child(1) {
         left: 0;
-        right: auto;
+
+        right:
+            auto;
     }
 
     .lane-line:nth-child(2) {
-        left: 50%;
-        right: auto;
+        left:
+            50%;
+
+        right:
+            auto;
     }
 
     .lane-line:nth-child(3) {
-        display: block;
+        display:
+            block;
 
-        left: auto;
-        right: 0;
+        left:
+            auto;
+
+        right:
+            0;
     }
 
     .lane-line:nth-child(4) {
-        display: none;
+        display:
+            none;
     }
 
     .logo {
@@ -2222,21 +2299,26 @@ textarea {
 
     .nav-list,
     .nav-list.active {
-        position: static;
+        position:
+            static;
 
-        display: flex;
+        display:
+            flex;
 
         flex-direction:
             row;
 
-        align-items: center;
+        align-items:
+            center;
 
         gap:
             var(--space-lg);
 
-        padding: 0;
+        padding:
+            0;
 
-        border: 0;
+        border:
+            0;
 
         background:
             transparent;
@@ -2247,9 +2329,11 @@ textarea {
 
     .nav-list a,
     .nav-list.active a {
-        display: inline;
+        display:
+            inline;
 
-        padding: 0;
+        padding:
+            0;
 
         color:
             var(--color-text-muted);
@@ -2259,11 +2343,13 @@ textarea {
     }
 
     .menu-toggle {
-        display: none;
+        display:
+            none;
     }
 
     .hero-actions {
-        width: auto;
+        width:
+            auto;
 
         flex-direction:
             row;
@@ -2294,13 +2380,13 @@ textarea {
             );
     }
 
-    .projects-grid {
-        grid-template-columns:
-            repeat(
-                2,
-                minmax(0, 1fr)
-            );
-    }
+    /*
+        Projects는 별도 지정하지 않는다.
+
+        auto-fit + minmax가
+        화면 너비에 따라 자동으로
+        열 개수를 결정한다.
+    */
 
     .contact-form {
         padding:
@@ -2332,9 +2418,11 @@ textarea {
     }
 
     .lane-line:nth-child(1) {
-        left: 0;
+        left:
+            0;
 
-        right: auto;
+        right:
+            auto;
     }
 
     .lane-line:nth-child(2) {
@@ -2346,7 +2434,8 @@ textarea {
     }
 
     .lane-line:nth-child(3) {
-        display: block;
+        display:
+            block;
 
         left:
             66.666666%;
@@ -2356,11 +2445,14 @@ textarea {
     }
 
     .lane-line:nth-child(4) {
-        display: block;
+        display:
+            block;
 
-        left: auto;
+        left:
+            auto;
 
-        right: 0;
+        right:
+            0;
     }
 
     .skills-grid {
@@ -2376,13 +2468,11 @@ textarea {
             1rem;
     }
 
-    .projects-grid {
-        grid-template-columns:
-            repeat(
-                3,
-                minmax(0, 1fr)
-            );
-    }
+    /*
+        Projects Grid는
+        auto-fit + minmax()로
+        자동 계산한다.
+    */
 
     .project-card {
         margin-inline:
@@ -2398,7 +2488,8 @@ textarea {
 @media (pointer: fine) {
 
     .pointer-effect {
-        display: block;
+        display:
+            block;
     }
 }
 
@@ -2440,15 +2531,19 @@ textarea {
     }
 
     [data-reveal] {
-        opacity: 1;
+        opacity:
+            1;
 
-        translate: none;
+        translate:
+            none;
 
-        transition: none;
+        transition:
+            none;
     }
 
     .typing-cursor {
-        display: none;
+        display:
+            none;
     }
 }
 
@@ -2467,11 +2562,13 @@ textarea {
             )
             scale(0.4);
 
-        opacity: 0;
+        opacity:
+            0;
     }
 
     20% {
-        opacity: 0.55;
+        opacity:
+            0.55;
     }
 
     100% {
@@ -2482,7 +2579,8 @@ textarea {
             )
             scale(2.5);
 
-        opacity: 0;
+        opacity:
+            0;
     }
 }
 
@@ -2491,11 +2589,13 @@ textarea {
 
     0%,
     48% {
-        opacity: 1;
+        opacity:
+            1;
     }
 
     49%,
     100% {
-        opacity: 0;
+        opacity:
+            0;
     }
 }
