@@ -45,11 +45,8 @@
 
 
     <!--
-        Light Mode
-        → 물결 / 수면 반사
-
-        Dark Mode
-        → 조명 / 윤슬
+        Light Mode → 물결 / 수면 반사
+        Dark Mode  → 조명 / 윤슬
     -->
     <div
         class="pointer-effect"
@@ -161,11 +158,42 @@
 
 
                 <h1 id="hero-title">
-                    경험을 연결하고,<br>
 
-                    <span>
+                    <span class="hero-static-line">
+                        경험을 연결하고,
+                    </span>
+
+                    <br>
+
+                    <!--
+                        시각적으로 보이는 타이핑 애니메이션.
+                        접근성 도구에서는 숨긴다.
+                    -->
+                    <span
+                        class="hero-typing-line"
+                        aria-hidden="true"
+                    >
+                        <span
+                            id="typing-text"
+                            data-text="서비스의 흐름을 설계합니다."
+                        ></span>
+
+                        <span
+                            class="typing-cursor"
+                            aria-hidden="true"
+                        >
+                            |
+                        </span>
+                    </span>
+
+
+                    <!--
+                        스크린리더에는 완성된 문장을 바로 제공
+                    -->
+                    <span class="sr-only">
                         서비스의 흐름을 설계합니다.
                     </span>
+
                 </h1>
 
 
@@ -211,11 +239,9 @@
                     SECTION 01 / ABOUT
                 </p>
 
-
                 <h2 id="about-title">
                     Poolside Introduction
                 </h2>
-
 
                 <p>
                     클라이언트 개발에서 시작해 더 넓은 서비스 개발로
@@ -287,11 +313,9 @@
                     SECTION 02 / SKILLS
                 </p>
 
-
                 <h2 id="skills-title">
                     Structured Lanes
                 </h2>
-
 
                 <p>
                     서로 다른 레인에서 쌓아온 개발 경험
@@ -600,10 +624,6 @@
             </header>
 
 
-            <!--
-                GitHub 데이터에서 실제 존재하는
-                Language 필터 버튼을 JavaScript가 생성한다.
-            -->
             <div
                 class="project-filters"
                 id="project-filters"
@@ -672,7 +692,6 @@
                         이름
                     </label>
 
-
                     <input
                         type="text"
                         id="name"
@@ -681,7 +700,6 @@
                         aria-describedby="name-error"
                         required
                     >
-
 
                     <p
                         class="error-message"
@@ -698,7 +716,6 @@
                         이메일
                     </label>
 
-
                     <input
                         type="email"
                         id="email"
@@ -707,7 +724,6 @@
                         aria-describedby="email-error"
                         required
                     >
-
 
                     <p
                         class="error-message"
@@ -724,7 +740,6 @@
                         메시지
                     </label>
 
-
                     <textarea
                         id="message"
                         name="message"
@@ -732,7 +747,6 @@
                         aria-describedby="message-error"
                         required
                     ></textarea>
-
 
                     <p
                         class="error-message"

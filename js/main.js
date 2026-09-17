@@ -34,6 +34,12 @@ const pointerEffect =
 const revealElements =
     document.querySelectorAll("[data-reveal]");
 
+const typingText =
+    document.querySelector("#typing-text");
+
+const typingCursor =
+    document.querySelector(".typing-cursor");
+
 const contactForm =
     document.querySelector(".contact-form");
 
@@ -84,6 +90,14 @@ const REVEAL_THRESHOLD =
     0.2;
 
 
+const TYPING_SPEED =
+    90;
+
+
+const TYPING_START_DELAY =
+    450;
+
+
 const hasFinePointer =
     window.matchMedia(
         "(pointer: fine)"
@@ -99,16 +113,6 @@ const prefersReducedMotion =
 // ==========================================================
 // SYSTEM THEME
 // ==========================================================
-
-/*
-    운영체제 / 브라우저의 테마 설정 확인
-
-    true
-    → 시스템 Dark Mode
-
-    false
-    → 시스템 Light Mode
-*/
 
 const systemThemeQuery =
     window.matchMedia(
@@ -165,32 +169,16 @@ const applyTheme = (theme) => {
 };
 
 
-/*
-    이전에 사용자가 직접 선택한 테마 확인
-*/
-
 const savedTheme =
     localStorage.getItem(
         "theme"
     );
 
 
-/*
-    localStorage에
-    정상적인 테마 값이 있는지 확인
-*/
-
 const hasSavedTheme =
     savedTheme === "dark" ||
     savedTheme === "light";
 
-
-/*
-    우선순위
-
-    1. 사용자가 저장한 Theme
-    2. 시스템 Theme
-*/
 
 let currentTheme =
     hasSavedTheme
@@ -198,30 +186,14 @@ let currentTheme =
         : getSystemTheme();
 
 
-/*
-    사용자가 직접 테마를 선택했는지 여부.
-
-    true가 되면
-    시스템 테마가 변경되어도
-    사용자 설정을 우선한다.
-*/
-
 let hasUserThemePreference =
     hasSavedTheme;
 
-
-/*
-    최초 Theme 적용
-*/
 
 applyTheme(
     currentTheme
 );
 
-
-// ==========================================================
-// THEME BUTTON
-// ==========================================================
 
 themeToggle.addEventListener(
     "click",
@@ -231,12 +203,6 @@ themeToggle.addEventListener(
                 ? "dark"
                 : "light";
 
-
-        /*
-            사용자가 직접 Theme를 선택했으므로
-            이후에는 시스템 설정보다
-            사용자 설정을 우선한다.
-        */
 
         hasUserThemePreference =
             true;
@@ -254,23 +220,6 @@ themeToggle.addEventListener(
     }
 );
 
-
-// ==========================================================
-// SYSTEM THEME CHANGE
-// ==========================================================
-
-/*
-    사용자가 직접 테마를 고르지 않은 상태에서
-    OS Theme가 변경되면 사이트도 함께 변경된다.
-
-    예:
-    Mac Light
-    ↓
-    Mac Dark
-
-    Portfolio도
-    Day Pool → Night Pool
-*/
 
 systemThemeQuery.addEventListener(
     "change",
@@ -293,6 +242,100 @@ systemThemeQuery.addEventListener(
         );
     }
 );
+
+
+// ==========================================================
+// HERO TYPING
+// ==========================================================
+
+const runHeroTyping = () => {
+    if (!typingText) {
+        return;
+    }
+
+
+    const fullText =
+        typingText.dataset.text ||
+        "";
+
+
+    /*
+        한글도 안전하게 한 글자씩 처리하기 위해
+        Array.from() 사용.
+    */
+
+    const characters =
+        Array.from(
+            fullText
+        );
+
+
+    /*
+        사용자가 동작 감소 옵션을 사용하면
+        타이핑하지 않고 바로 완성된 문장을 표시.
+    */
+
+    if (
+        prefersReducedMotion
+    ) {
+        typingText.textContent =
+            fullText;
+
+
+        if (typingCursor) {
+            typingCursor.hidden =
+                true;
+        }
+
+
+        return;
+    }
+
+
+    typingText.textContent =
+        "";
+
+
+    let typingIndex =
+        0;
+
+
+    const typeNextCharacter =
+        () => {
+
+            if (
+                typingIndex >=
+                characters.length
+            ) {
+                return;
+            }
+
+
+            typingText.textContent +=
+                characters[
+                    typingIndex
+                ];
+
+
+            typingIndex +=
+                1;
+
+
+            window.setTimeout(
+                typeNextCharacter,
+                TYPING_SPEED
+            );
+        };
+
+
+    window.setTimeout(
+        typeNextCharacter,
+        TYPING_START_DELAY
+    );
+};
+
+
+runHeroTyping();
 
 
 // ==========================================================
@@ -1018,16 +1061,6 @@ const escapeHTML =
 const renderProjectFilters =
     (repositories) => {
 
-        /*
-            모든 Repository의 language 추출
-            ↓
-            null 제거
-            ↓
-            Set으로 중복 제거
-            ↓
-            다시 Array로 변경
-        */
-
         const languages =
             [
                 ...new Set(
@@ -1325,15 +1358,6 @@ const renderProjects =
 
 const renderFilteredProjects =
     () => {
-
-        /*
-            선택 미션 핵심
-
-            ALL이면 전체 사용
-
-            아니면 filter()를 사용해서
-            선택된 언어와 같은 Repository만 반환
-        */
 
         const filteredRepositories =
             currentProjectFilter ===
