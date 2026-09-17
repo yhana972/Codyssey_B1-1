@@ -30,9 +30,6 @@
 
     <!-- ==================================================
          Pool Lane Background
-
-         4개의 경계선으로 3개의 Lane 생성
-         CSS에서 콘텐츠 max-width와 동일하게 정렬
     =================================================== -->
     <div
         class="pool-background"
@@ -49,10 +46,10 @@
 
     <!--
         Light Mode
-        → 마우스 주변 물결 / 수면 반사
+        → 물결 / 수면 반사
 
         Dark Mode
-        → 마우스 주변 조명 / 윤슬
+        → 조명 / 윤슬
     -->
     <div
         class="pointer-effect"
@@ -115,7 +112,6 @@
 
             <div class="nav-actions">
 
-                <!-- Day / Night Pool -->
                 <button
                     class="theme-toggle"
                     type="button"
@@ -125,7 +121,6 @@
                 </button>
 
 
-                <!-- Mobile Menu -->
                 <button
                     class="menu-toggle"
                     type="button"
@@ -276,7 +271,6 @@
 
         <!-- ==================================================
              Skills
-             각 카드가 배경 Lane 하나씩 사용
         =================================================== -->
         <section
             class="section skills"
@@ -309,10 +303,7 @@
             <div class="skills-grid">
 
 
-                <!-- =========================
-                     LANE 01
-                     Client / XR
-                ========================== -->
+                <!-- LANE 01 -->
                 <article
                     class="skill-card"
                     data-reveal
@@ -335,7 +326,6 @@
                         class="skill-icon"
                         aria-hidden="true"
                     >
-                        <!-- XR / Client Icon -->
                         <svg
                             viewBox="0 0 24 24"
                             width="30"
@@ -394,10 +384,7 @@
                 </article>
 
 
-                <!-- =========================
-                     LANE 02
-                     Web / App
-                ========================== -->
+                <!-- LANE 02 -->
                 <article
                     class="skill-card"
                     data-reveal
@@ -420,7 +407,6 @@
                         class="skill-icon"
                         aria-hidden="true"
                     >
-                        <!-- Web / App Icon -->
                         <svg
                             viewBox="0 0 24 24"
                             width="30"
@@ -485,10 +471,7 @@
                 </article>
 
 
-                <!-- =========================
-                     LANE 03
-                     Service / AI
-                ========================== -->
+                <!-- LANE 03 -->
                 <article
                     class="skill-card"
                     data-reveal
@@ -511,7 +494,6 @@
                         class="skill-icon"
                         aria-hidden="true"
                     >
-                        <!-- AI / Service Icon -->
                         <svg
                             viewBox="0 0 24 24"
                             width="30"
@@ -619,15 +601,18 @@
 
 
             <!--
-                JavaScript / GitHub API
-
-                Loading
-                Success
-                Error
-                Empty
-
-                상태에 따라 내부 HTML 변경
+                GitHub 데이터에서 실제 존재하는
+                Language 필터 버튼을 JavaScript가 생성한다.
             -->
+            <div
+                class="project-filters"
+                id="project-filters"
+                role="group"
+                aria-label="프로젝트 언어 필터"
+                hidden
+            ></div>
+
+
             <div
                 class="projects-grid"
                 id="projects-list"
@@ -681,7 +666,6 @@
                 data-reveal
             >
 
-                <!-- Name -->
                 <div class="form-field">
 
                     <label for="name">
@@ -708,7 +692,6 @@
                 </div>
 
 
-                <!-- Email -->
                 <div class="form-field">
 
                     <label for="email">
@@ -735,7 +718,6 @@
                 </div>
 
 
-                <!-- Message -->
                 <div class="form-field">
 
                     <label for="message">
