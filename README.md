@@ -14,8 +14,8 @@ Dark Mode는 야간 수영장의 조명과 윤슬을 모티브로 디자인했�
 
 ## 🔗 Demo
 
-- GitHub Repository: `[repository](https://github.com/yhana972/Codyssey_B1-1)`
-- GitHub Pages: `[배포페이지](https://yhana972.github.io/Codyssey_B1-1/)`
+- GitHub Repository: [repository](https://github.com/yhana972/Codyssey_B1-1)
+- GitHub Pages: [배포페이지](https://yhana972.github.io/Codyssey_B1-1/)
 
 ---
 
