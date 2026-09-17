@@ -44,10 +44,14 @@ const contactForm =
     document.querySelector("#contact-form");
 
 const submitButton =
-    contactForm.querySelector(".submit-button");
+    contactForm.querySelector(
+        ".submit-button"
+    );
 
 const submitLabel =
-    submitButton.querySelector(".submit-label");
+    submitButton.querySelector(
+        ".submit-label"
+    );
 
 const nameInput =
     document.querySelector("#name");
@@ -72,29 +76,59 @@ const projectFilters =
 // CONFIG
 // ==========================================================
 
-const GITHUB_USERNAME = "yhana972";
-//const GITHUB_USERNAME = "this-user-does-not-exist-test";
+const GITHUB_USERNAME =
+    "yhana972";
+
 
 const GITHUB_API_URL =
     `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&direction=desc&per_page=30`;
 
+
 const HEADER_SCROLL_THRESHOLD =
     60;
+
 
 const SCROLL_TOP_THRESHOLD =
     300;
 
+
 const TABLET_BREAKPOINT =
     768;
+
 
 const REVEAL_THRESHOLD =
     0.2;
 
+
 const TYPING_SPEED =
     90;
 
+
 const TYPING_START_DELAY =
     450;
+
+
+/*
+    Contact Validation 기준.
+
+    HTML의 minlength / maxlength와
+    동일한 값을 유지한다.
+*/
+
+const NAME_MIN_LENGTH =
+    2;
+
+const NAME_MAX_LENGTH =
+    30;
+
+const EMAIL_MAX_LENGTH =
+    100;
+
+const MESSAGE_MIN_LENGTH =
+    10;
+
+const MESSAGE_MAX_LENGTH =
+    1000;
 
 
 // ==========================================================
@@ -106,10 +140,12 @@ const hasFinePointer =
         "(pointer: fine)"
     ).matches;
 
+
 const prefersReducedMotion =
     window.matchMedia(
         "(prefers-reduced-motion: reduce)"
     ).matches;
+
 
 const systemThemeQuery =
     window.matchMedia(
@@ -129,7 +165,10 @@ const getSystemTheme = () => {
 
 
 const savedTheme =
-    localStorage.getItem("theme");
+    localStorage.getItem(
+        "theme"
+    );
+
 
 const hasSavedTheme =
     savedTheme === "dark" ||
@@ -144,17 +183,17 @@ const hasSavedTheme =
     애플리케이션에서 변경되는 상태를
     하나의 STATE 객체에 모아 관리한다.
 
-    기본 흐름:
     사용자 이벤트
     → STATE 변경
-    → render / UI 함수 호출
-    → 화면 반영
+    → Render 함수 호출
+    → UI 반영
 */
 
 const STATE = {
     theme: {
         // 초기 테마 우선순위:
         // localStorage 사용자 설정 → 시스템 테마 설정
+
         current:
             hasSavedTheme
                 ? savedTheme
@@ -191,7 +230,9 @@ const STATE = {
 // THEME
 // ==========================================================
 
-const updateThemeButton = (theme) => {
+const updateThemeButton = (
+    theme
+) => {
     if (theme === "dark") {
         themeToggle.textContent =
             "☀";
@@ -204,8 +245,10 @@ const updateThemeButton = (theme) => {
         return;
     }
 
+
     themeToggle.textContent =
         "☾";
+
 
     themeToggle.setAttribute(
         "aria-label",
@@ -220,21 +263,12 @@ const renderTheme = () => {
         .theme =
         STATE.theme.current;
 
+
     updateThemeButton(
         STATE.theme.current
     );
 };
 
-
-/*
-    Theme Flow
-
-    Theme Button Click
-    → STATE.theme.current 변경
-    → renderTheme()
-    → data-theme 변경
-    → 화면 변경
-*/
 
 const handleThemeToggle = () => {
     STATE.theme.current =
@@ -242,10 +276,13 @@ const handleThemeToggle = () => {
             ? "dark"
             : "light";
 
+
     STATE.theme.hasUserPreference =
         true;
 
+
     renderTheme();
+
 
     localStorage.setItem(
         "theme",
@@ -254,30 +291,27 @@ const handleThemeToggle = () => {
 };
 
 
-/*
-    사용자가 직접 테마를 선택하지 않은 경우에만
-    OS 테마 변경을 실시간 반영한다.
-*/
-
 const handleSystemThemeChange = (
     event
 ) => {
     if (
-        STATE.theme.hasUserPreference
+        STATE.theme
+            .hasUserPreference
     ) {
         return;
     }
+
 
     STATE.theme.current =
         event.matches
             ? "dark"
             : "light";
 
+
     renderTheme();
 };
 
 
-// 초기 Theme Rendering
 renderTheme();
 
 
@@ -290,49 +324,69 @@ const runHeroTyping = () => {
         return;
     }
 
+
     const fullText =
-        typingText.dataset.text || "";
+        typingText.dataset.text ||
+        "";
+
 
     const characters =
-        Array.from(fullText);
+        Array.from(
+            fullText
+        );
 
-    if (prefersReducedMotion) {
+
+    if (
+        prefersReducedMotion
+    ) {
         typingText.textContent =
             fullText;
+
 
         if (typingCursor) {
             typingCursor.hidden =
                 true;
         }
 
+
         return;
     }
+
 
     typingText.textContent =
         "";
 
+
     let typingIndex =
         0;
 
-    const typeNextCharacter = () => {
-        if (
-            typingIndex >=
-            characters.length
-        ) {
-            return;
-        }
 
-        typingText.textContent +=
-            characters[typingIndex];
+    const typeNextCharacter =
+        () => {
+            if (
+                typingIndex >=
+                characters.length
+            ) {
+                return;
+            }
 
-        typingIndex +=
-            1;
 
-        window.setTimeout(
-            typeNextCharacter,
-            TYPING_SPEED
-        );
-    };
+            typingText.textContent +=
+                characters[
+                    typingIndex
+                ];
+
+
+            typingIndex +=
+                1;
+
+
+            window.setTimeout(
+                typeNextCharacter,
+                TYPING_SPEED
+            );
+        };
+
 
     window.setTimeout(
         typeNextCharacter,
@@ -354,12 +408,14 @@ const renderMenu = () => {
         STATE.menu.isOpen
     );
 
+
     menuToggle.setAttribute(
         "aria-expanded",
         String(
             STATE.menu.isOpen
         )
     );
+
 
     menuToggle.setAttribute(
         "aria-label",
@@ -368,6 +424,7 @@ const renderMenu = () => {
             : "메뉴 열기"
     );
 
+
     menuToggle.textContent =
         STATE.menu.isOpen
             ? "×"
@@ -375,20 +432,12 @@ const renderMenu = () => {
 };
 
 
-/*
-    Menu Flow
-
-    Click
-    → STATE.menu.isOpen 변경
-    → renderMenu()
-    → class / aria 변경
-*/
-
 const setMenuState = (
     isOpen
 ) => {
     STATE.menu.isOpen =
         isOpen;
+
 
     renderMenu();
 };
@@ -402,7 +451,9 @@ const handleMenuToggle = () => {
 
 
 const handleNavLinkClick = () => {
-    setMenuState(false);
+    setMenuState(
+        false
+    );
 };
 
 
@@ -415,6 +466,7 @@ const handleOutsideMenuClick = (
         return;
     }
 
+
     if (
         siteNav.contains(
             event.target
@@ -423,7 +475,10 @@ const handleOutsideMenuClick = (
         return;
     }
 
-    setMenuState(false);
+
+    setMenuState(
+        false
+    );
 };
 
 
@@ -432,7 +487,9 @@ const handleWindowResize = () => {
         window.innerWidth >=
         TABLET_BREAKPOINT
     ) {
-        setMenuState(false);
+        setMenuState(
+            false
+        );
     }
 };
 
@@ -447,7 +504,11 @@ const handleEscapeKey = (
         return;
     }
 
-    setMenuState(false);
+
+    setMenuState(
+        false
+    );
+
 
     menuToggle.focus();
 };
@@ -463,19 +524,26 @@ const handleInternalLinkClick = (
     const link =
         event.currentTarget;
 
+
     const targetId =
-        link.getAttribute("href");
+        link.getAttribute(
+            "href"
+        );
+
 
     const target =
         document.querySelector(
             targetId
         );
 
+
     if (!target) {
         return;
     }
 
+
     event.preventDefault();
+
 
     target.scrollIntoView({
         behavior:
@@ -494,17 +562,24 @@ const handleInternalLinkClick = (
 // ==========================================================
 
 const updateScrollUI = () => {
-    scrollTopButton.classList.toggle(
-        "active",
-        window.scrollY >=
-            SCROLL_TOP_THRESHOLD
-    );
+    scrollTopButton
+        .classList
+        .toggle(
+            "active",
 
-    siteHeader.classList.toggle(
-        "scrolled",
-        window.scrollY >=
-            HEADER_SCROLL_THRESHOLD
-    );
+            window.scrollY >=
+                SCROLL_TOP_THRESHOLD
+        );
+
+
+    siteHeader
+        .classList
+        .toggle(
+            "scrolled",
+
+            window.scrollY >=
+                HEADER_SCROLL_THRESHOLD
+        );
 };
 
 
@@ -542,12 +617,14 @@ const updatePointerEffect = (
     const y =
         `${event.clientY}px`;
 
+
     document.documentElement
         .style
         .setProperty(
             "--pointer-x",
             x
         );
+
 
     document.documentElement
         .style
@@ -556,9 +633,12 @@ const updatePointerEffect = (
             y
         );
 
-    pointerEffect.classList.add(
-        "active"
-    );
+
+    pointerEffect
+        .classList
+        .add(
+            "active"
+        );
 };
 
 
@@ -572,9 +652,11 @@ const handlePointerMove = (
 
 
 const handlePointerLeave = () => {
-    pointerEffect.classList.remove(
-        "active"
-    );
+    pointerEffect
+        .classList
+        .remove(
+            "active"
+        );
 };
 
 
@@ -585,9 +667,11 @@ const handlePointerLeave = () => {
 const showRevealElement = (
     element
 ) => {
-    element.classList.add(
-        "visible"
-    );
+    element
+        .classList
+        .add(
+            "visible"
+        );
 };
 
 
@@ -595,12 +679,6 @@ const handleRevealEntries = (
     entries,
     observer
 ) => {
-    /*
-        forEach:
-        IntersectionObserver가 전달한
-        각 요소의 상태를 순서대로 확인한다.
-    */
-
     entries.forEach(
         (entry) => {
             if (
@@ -609,9 +687,11 @@ const handleRevealEntries = (
                 return;
             }
 
+
             showRevealElement(
                 entry.target
             );
+
 
             observer.unobserve(
                 entry.target
@@ -630,18 +710,13 @@ const initializeRevealAnimation =
                 in window
             )
         ) {
-            /*
-                forEach:
-                애니메이션을 사용할 수 없는 환경에서는
-                모든 요소를 즉시 표시한다.
-            */
-
             revealElements.forEach(
                 showRevealElement
             );
 
             return;
         }
+
 
         const revealObserver =
             new IntersectionObserver(
@@ -652,11 +727,6 @@ const initializeRevealAnimation =
                 }
             );
 
-        /*
-            forEach:
-            data-reveal 요소 각각을
-            IntersectionObserver의 감시 대상으로 등록한다.
-        */
 
         revealElements.forEach(
             (element) => {
@@ -679,28 +749,39 @@ const emailPattern =
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 
+// ----------------------------------------------------------
+// 공통 Error UI
+// ----------------------------------------------------------
+
 const showError = (
     input,
     message
 ) => {
-    input.classList.add(
-        "error"
-    );
+    input
+        .classList
+        .add(
+            "error"
+        );
+
 
     input.setAttribute(
         "aria-invalid",
         "true"
     );
 
+
     const formField =
         input.closest(
             ".form-field"
         );
 
+
     const errorMessage =
-        formField.querySelector(
-            ".error-message"
-        );
+        formField
+            .querySelector(
+                ".error-message"
+            );
+
 
     errorMessage.textContent =
         message;
@@ -710,32 +791,47 @@ const showError = (
 const clearError = (
     input
 ) => {
-    input.classList.remove(
-        "error"
-    );
+    input
+        .classList
+        .remove(
+            "error"
+        );
+
 
     input.removeAttribute(
         "aria-invalid"
     );
+
 
     const formField =
         input.closest(
             ".form-field"
         );
 
+
     const errorMessage =
-        formField.querySelector(
-            ".error-message"
-        );
+        formField
+            .querySelector(
+                ".error-message"
+            );
+
 
     errorMessage.textContent =
         "";
 };
 
 
+// ----------------------------------------------------------
+// 이름 검증
+// 2 ~ 30자
+// ----------------------------------------------------------
+
 const validateName = () => {
     const value =
-        nameInput.value.trim();
+        nameInput
+            .value
+            .trim();
+
 
     if (!value) {
         showError(
@@ -746,17 +842,53 @@ const validateName = () => {
         return false;
     }
 
+
+    if (
+        value.length <
+        NAME_MIN_LENGTH
+    ) {
+        showError(
+            nameInput,
+            `이름은 최소 ${NAME_MIN_LENGTH}자 이상 입력해주세요.`
+        );
+
+        return false;
+    }
+
+
+    if (
+        value.length >
+        NAME_MAX_LENGTH
+    ) {
+        showError(
+            nameInput,
+            `이름은 최대 ${NAME_MAX_LENGTH}자까지 입력할 수 있습니다.`
+        );
+
+        return false;
+    }
+
+
     clearError(
         nameInput
     );
+
 
     return true;
 };
 
 
+// ----------------------------------------------------------
+// 이메일 검증
+// 필수 + 형식 + 최대 100자
+// ----------------------------------------------------------
+
 const validateEmail = () => {
     const value =
-        emailInput.value.trim();
+        emailInput
+            .value
+            .trim();
+
 
     if (!value) {
         showError(
@@ -766,6 +898,20 @@ const validateEmail = () => {
 
         return false;
     }
+
+
+    if (
+        value.length >
+        EMAIL_MAX_LENGTH
+    ) {
+        showError(
+            emailInput,
+            `이메일은 최대 ${EMAIL_MAX_LENGTH}자까지 입력할 수 있습니다.`
+        );
+
+        return false;
+    }
+
 
     if (
         !emailPattern.test(
@@ -780,17 +926,27 @@ const validateEmail = () => {
         return false;
     }
 
+
     clearError(
         emailInput
     );
+
 
     return true;
 };
 
 
+// ----------------------------------------------------------
+// 메시지 검증
+// 10 ~ 1000자
+// ----------------------------------------------------------
+
 const validateMessage = () => {
     const value =
-        messageInput.value.trim();
+        messageInput
+            .value
+            .trim();
+
 
     if (!value) {
         showError(
@@ -801,9 +957,37 @@ const validateMessage = () => {
         return false;
     }
 
+
+    if (
+        value.length <
+        MESSAGE_MIN_LENGTH
+    ) {
+        showError(
+            messageInput,
+            `메시지는 최소 ${MESSAGE_MIN_LENGTH}자 이상 입력해주세요.`
+        );
+
+        return false;
+    }
+
+
+    if (
+        value.length >
+        MESSAGE_MAX_LENGTH
+    ) {
+        showError(
+            messageInput,
+            `메시지는 최대 ${MESSAGE_MAX_LENGTH}자까지 입력할 수 있습니다.`
+        );
+
+        return false;
+    }
+
+
     clearError(
         messageInput
     );
+
 
     return true;
 };
@@ -813,11 +997,14 @@ const validateForm = () => {
     const isNameValid =
         validateName();
 
+
     const isEmailValid =
         validateEmail();
 
+
     const isMessageValid =
         validateMessage();
+
 
     return (
         isNameValid &&
@@ -835,10 +1022,13 @@ const clearFormStatus = () => {
     formStatus.textContent =
         "";
 
-    formStatus.classList.remove(
-        "success",
-        "error"
-    );
+
+    formStatus
+        .classList
+        .remove(
+            "success",
+            "error"
+        );
 };
 
 
@@ -849,44 +1039,58 @@ const setFormStatus = (
     formStatus.textContent =
         message;
 
-    formStatus.classList.remove(
-        "success",
-        "error"
-    );
+
+    formStatus
+        .classList
+        .remove(
+            "success",
+            "error"
+        );
+
 
     if (type) {
-        formStatus.classList.add(
-            type
-        );
+        formStatus
+            .classList
+            .add(
+                type
+            );
     }
 };
 
 
 const renderSubmittingState = () => {
-    contactForm.classList.toggle(
-        "is-submitting",
-        STATE.contact.isSubmitting
-    );
+    contactForm
+        .classList
+        .toggle(
+            "is-submitting",
+            STATE.contact
+                .isSubmitting
+        );
+
 
     contactForm.setAttribute(
         "aria-busy",
         String(
-            STATE.contact.isSubmitting
+            STATE.contact
+                .isSubmitting
         )
     );
 
-    /*
-        input 자체는 disabled 하지 않는다.
-        disabled input은 FormData에서 제외되기 때문이다.
 
-        전송 중에는 중복 Submit만 방지한다.
+    /*
+        Input을 disabled 하면
+        FormData에서 제외되므로
+        Submit Button만 비활성화한다.
     */
 
     submitButton.disabled =
-        STATE.contact.isSubmitting;
+        STATE.contact
+            .isSubmitting;
+
 
     submitLabel.textContent =
-        STATE.contact.isSubmitting
+        STATE.contact
+            .isSubmitting
             ? "Sending..."
             : "Send Message";
 };
@@ -897,6 +1101,7 @@ const setSubmittingState = (
 ) => {
     STATE.contact.isSubmitting =
         isSubmitting;
+
 
     renderSubmittingState();
 };
@@ -909,8 +1114,24 @@ const setSubmittingState = (
 const handleNameInput = () => {
     clearFormStatus();
 
+
+    const length =
+        nameInput
+            .value
+            .trim()
+            .length;
+
+
+    /*
+        현재 값이 유효 범위에 들어오면
+        기존 Error 상태를 실시간으로 제거한다.
+    */
+
     if (
-        nameInput.value.trim()
+        length >=
+            NAME_MIN_LENGTH &&
+        length <=
+            NAME_MAX_LENGTH
     ) {
         clearError(
             nameInput
@@ -922,10 +1143,16 @@ const handleNameInput = () => {
 const handleEmailInput = () => {
     clearFormStatus();
 
+
     const value =
-        emailInput.value.trim();
+        emailInput
+            .value
+            .trim();
+
 
     if (
+        value.length <=
+            EMAIL_MAX_LENGTH &&
         emailPattern.test(
             value
         )
@@ -940,8 +1167,19 @@ const handleEmailInput = () => {
 const handleMessageInput = () => {
     clearFormStatus();
 
+
+    const length =
+        messageInput
+            .value
+            .trim()
+            .length;
+
+
     if (
-        messageInput.value.trim()
+        length >=
+            MESSAGE_MIN_LENGTH &&
+        length <=
+            MESSAGE_MAX_LENGTH
     ) {
         clearError(
             messageInput
@@ -959,42 +1197,49 @@ const handleMessageInput = () => {
 
     Submit
     → Validation
-    → FormData 생성
-    → STATE.contact.isSubmitting = true
+    → FormData
+    → STATE.contact.isSubmitting
     → fetch()
     → Success / Error
-    → STATE.contact.isSubmitting = false
 */
 
 const handleContactSubmit =
     async (event) => {
         event.preventDefault();
 
+
         clearFormStatus();
+
 
         const isValid =
             validateForm();
 
+
         if (!isValid) {
             const firstInvalidInput =
-                contactForm.querySelector(
-                    ".error"
-                );
+                contactForm
+                    .querySelector(
+                        ".error"
+                    );
+
 
             if (
                 firstInvalidInput
             ) {
-                firstInvalidInput.focus();
+                firstInvalidInput
+                    .focus();
             }
+
 
             return;
         }
 
 
         if (
-            contactForm.action.includes(
-                "YOUR_FORM_ID"
-            )
+            contactForm.action
+                .includes(
+                    "YOUR_FORM_ID"
+                )
         ) {
             setFormStatus(
                 "Formspree Form ID를 먼저 설정해주세요.",
@@ -1004,11 +1249,6 @@ const handleContactSubmit =
             return;
         }
 
-
-        /*
-            FormData는 submit 상태 변경 전에 생성한다.
-            입력 데이터가 정상적으로 포함되도록 하기 위함이다.
-        */
 
         const formData =
             new FormData(
@@ -1041,7 +1281,8 @@ const handleContactSubmit =
 
 
             if (
-                response.status === 429
+                response.status ===
+                429
             ) {
                 throw new Error(
                     "RATE_LIMIT"
@@ -1053,22 +1294,19 @@ const handleContactSubmit =
                 let message =
                     "메시지를 전송하지 못했습니다.";
 
+
                 try {
                     const data =
                         await response.json();
+
 
                     if (
                         Array.isArray(
                             data.errors
                         ) &&
-                        data.errors.length > 0
+                        data.errors.length >
+                            0
                     ) {
-                        /*
-                            map:
-                            Formspree의 errors 배열에서
-                            사용자에게 보여줄 message만 추출한다.
-                        */
-
                         message =
                             data.errors
                                 .map(
@@ -1080,12 +1318,14 @@ const handleContactSubmit =
                                 )
                                 .join(" ");
                     }
+
                 } catch {
                     /*
                         JSON 응답이 아닌 경우
-                        기본 메시지를 그대로 사용한다.
+                        기본 메시지를 사용한다.
                     */
                 }
+
 
                 throw new Error(
                     message
@@ -1095,12 +1335,6 @@ const handleContactSubmit =
 
             contactForm.reset();
 
-
-            /*
-                forEach:
-                이름 / 이메일 / 메시지 입력창의
-                에러 상태를 동일한 방식으로 초기화한다.
-            */
 
             [
                 nameInput,
@@ -1174,10 +1408,16 @@ const escapeHTML = (
             "&#039;",
     };
 
-    return String(value).replace(
+
+    return String(
+        value
+    ).replace(
         /[&<>"']/g,
+
         (character) =>
-            entities[character]
+            entities[
+                character
+            ]
     );
 };
 
@@ -1190,13 +1430,13 @@ const renderProjectFilters =
     () => {
         /*
             map:
-            Repository 배열에서 language만 추출한다.
+            Repository → Language 추출
 
             filter:
-            language가 null인 Repository를 제거한다.
+            null Language 제거
 
             Set:
-            중복 language를 제거한다.
+            Language 중복 제거
         */
 
         const languages = [
@@ -1230,18 +1470,15 @@ const renderProjectFilters =
         ];
 
 
-        /*
-            map:
-            필터 이름 배열을 HTML Button 문자열 배열로 변환한다.
-        */
-
         projectFilters.innerHTML =
             filters
                 .map(
                     (filter) => {
                         const isActive =
                             filter ===
-                            STATE.projects.filter;
+                            STATE.projects
+                                .filter;
+
 
                         const label =
                             filter === "ALL"
@@ -1250,10 +1487,12 @@ const renderProjectFilters =
                                     filter
                                 );
 
+
                         const encodedFilter =
                             encodeURIComponent(
                                 filter
                             );
+
 
                         return `
                             <button
@@ -1283,6 +1522,7 @@ const hideProjectFilters = () => {
     projectFilters.hidden =
         true;
 
+
     projectFilters.innerHTML =
         "";
 };
@@ -1292,12 +1532,15 @@ const renderLoading = () => {
     STATE.projects.status =
         "loading";
 
+
     hideProjectFilters();
+
 
     projectsList.setAttribute(
         "aria-busy",
         "true"
     );
+
 
     projectsList.innerHTML = `
         <p class="projects-status">
@@ -1311,12 +1554,15 @@ const renderEmpty = () => {
     STATE.projects.status =
         "empty";
 
+
     hideProjectFilters();
+
 
     projectsList.setAttribute(
         "aria-busy",
         "false"
     );
+
 
     projectsList.innerHTML = `
         <p class="projects-status">
@@ -1332,6 +1578,7 @@ const renderFilteredEmpty = () => {
         "false"
     );
 
+
     projectsList.innerHTML = `
         <p class="projects-status">
             해당 언어의 프로젝트가 없습니다.
@@ -1346,12 +1593,15 @@ const renderError = (
     STATE.projects.status =
         "error";
 
+
     hideProjectFilters();
+
 
     projectsList.setAttribute(
         "aria-busy",
         "false"
     );
+
 
     projectsList.innerHTML = `
         <div class="projects-status">
@@ -1382,17 +1632,12 @@ const renderProjects = (
     STATE.projects.status =
         "success";
 
+
     projectsList.setAttribute(
         "aria-busy",
         "false"
     );
 
-
-    /*
-        map:
-        Repository 객체 배열을
-        Project Card HTML 문자열 배열로 변환한다.
-    */
 
     const cards =
         repositories.map(
@@ -1416,17 +1661,20 @@ const renderProjects = (
                         name
                     );
 
+
                 const safeDescription =
                     escapeHTML(
                         description ||
                         "프로젝트 설명이 없습니다."
                     );
 
+
                 const safeLanguage =
                     escapeHTML(
                         language ||
                         "Unknown"
                     );
+
 
                 const safeUrl =
                     escapeHTML(
@@ -1498,18 +1746,10 @@ const renderProjects = (
 const renderFilteredProjects =
     () => {
         /*
-            Project Filter Flow
-
-            Filter Button Click
-            → STATE.projects.filter 변경
+            Filter Button
+            → STATE.projects.filter
             → filter()
             → renderProjects()
-        */
-
-        /*
-            filter:
-            사용자가 선택한 Language와 일치하는
-            Repository만 새 배열로 반환한다.
         */
 
         const filteredRepositories =
@@ -1526,13 +1766,14 @@ const renderFilteredProjects =
                             language,
                         }) =>
                             language ===
-                            STATE.projects.filter
+                            STATE.projects
+                                .filter
                     );
 
 
         if (
-            filteredRepositories.length ===
-            0
+            filteredRepositories
+                .length === 0
         ) {
             renderFilteredEmpty();
 
@@ -1549,21 +1790,6 @@ const renderFilteredProjects =
 // ==========================================================
 // FETCH PROJECTS
 // ==========================================================
-
-/*
-    GitHub API Flow
-
-    fetchProjects()
-    → Loading
-    → API Request
-    → STATE.projects.repositories 저장
-    → Filter Rendering
-    → Project Rendering
-
-    실패 시
-    → Error State
-    → Retry UI
-*/
 
 const fetchProjects =
     async () => {
@@ -1585,6 +1811,7 @@ const fetchProjects =
                     `[GitHub API] Rate Limit Error (${response.status})`
                 );
 
+
                 throw new Error(
                     "RATE_LIMIT"
                 );
@@ -1592,11 +1819,13 @@ const fetchProjects =
 
 
             if (
-                response.status === 404
+                response.status ===
+                404
             ) {
                 console.error(
                     "[GitHub API] User Not Found (404)"
                 );
+
 
                 throw new Error(
                     "NOT_FOUND"
@@ -1608,6 +1837,7 @@ const fetchProjects =
                 console.error(
                     `[GitHub API] HTTP Error (${response.status})`
                 );
+
 
                 throw new Error(
                     `HTTP_${response.status}`
@@ -1628,6 +1858,7 @@ const fetchProjects =
                     "[GitHub API] Invalid Response Data"
                 );
 
+
                 throw new Error(
                     "INVALID_DATA"
                 );
@@ -1641,19 +1872,17 @@ const fetchProjects =
                 STATE.projects.repositories =
                     [];
 
+
                 renderEmpty();
+
 
                 return;
             }
 
 
-            /*
-                API 결과를 STATE에 저장한다.
-                이후 UI는 STATE를 기준으로 렌더링한다.
-            */
-
             STATE.projects.repositories =
                 repositories;
+
 
             STATE.projects.filter =
                 "ALL";
@@ -1729,13 +1958,6 @@ const handleProjectFilterClick = (
     }
 
 
-    /*
-        1. 이벤트
-        2. STATE 변경
-        3. 필터 UI 렌더링
-        4. 프로젝트 재렌더링
-    */
-
     STATE.projects.filter =
         decodeURIComponent(
             filterButton
@@ -1782,17 +2004,12 @@ const handleProjectsListClick = (
 // EVENT REGISTRATION
 // ==========================================================
 
-/*
-    이벤트 처리 함수를 별도로 명명해
-    각 이벤트의 역할을 쉽게 추적할 수 있도록 구성한다.
-*/
-
-
 // Theme
 themeToggle.addEventListener(
     "click",
     handleThemeToggle
 );
+
 
 systemThemeQuery.addEventListener(
     "change",
@@ -1806,6 +2023,7 @@ menuToggle.addEventListener(
     handleMenuToggle
 );
 
+
 navLinks.forEach(
     (link) => {
         link.addEventListener(
@@ -1815,15 +2033,18 @@ navLinks.forEach(
     }
 );
 
+
 document.addEventListener(
     "click",
     handleOutsideMenuClick
 );
 
+
 document.addEventListener(
     "keydown",
     handleEscapeKey
 );
+
 
 window.addEventListener(
     "resize",
@@ -1852,6 +2073,7 @@ window.addEventListener(
     }
 );
 
+
 scrollTopButton.addEventListener(
     "click",
     handleScrollTopClick
@@ -1869,6 +2091,7 @@ if (hasFinePointer) {
         }
     );
 
+
     document.documentElement
         .addEventListener(
             "mouseleave",
@@ -1883,15 +2106,18 @@ nameInput.addEventListener(
     handleNameInput
 );
 
+
 emailInput.addEventListener(
     "input",
     handleEmailInput
 );
 
+
 messageInput.addEventListener(
     "input",
     handleMessageInput
 );
+
 
 contactForm.addEventListener(
     "submit",
@@ -1904,6 +2130,7 @@ projectFilters.addEventListener(
     "click",
     handleProjectFilterClick
 );
+
 
 projectsList.addEventListener(
     "click",

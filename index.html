@@ -67,13 +67,6 @@
     =================================================== -->
     <header class="site-header">
 
-        <!--
-            페이지의 주요 Section 이동을 담당하는
-            Navigation Landmark.
-
-            aria-label을 통해 다른 Navigation과
-            목적을 구분한다.
-        -->
         <nav
             class="site-nav"
             aria-label="메인 내비게이션"
@@ -186,12 +179,6 @@
                     <br>
 
 
-                    <!--
-                        시각적인 Typing Animation 영역.
-
-                        동일한 완성 문장을 아래 sr-only에 제공하므로
-                        애니메이션 자체는 스크린리더에서 제외한다.
-                    -->
                     <span
                         class="hero-typing-line"
                         aria-hidden="true"
@@ -210,10 +197,6 @@
                     </span>
 
 
-                    <!--
-                        스크린리더 사용자는
-                        타이핑 과정이 아닌 완성된 문장을 바로 읽는다.
-                    -->
                     <span class="sr-only">
                         서비스의 흐름을 설계합니다.
                     </span>
@@ -246,9 +229,7 @@
 
 
         <!-- ==================================================
-             About Section
-
-             aria-labelledby로 Section 제목과 연결
+             About
         =================================================== -->
         <section
             class="section about"
@@ -324,9 +305,7 @@
 
 
         <!-- ==================================================
-             Skills Section
-
-             aria-labelledby로 Section 제목과 연결
+             Skills
         =================================================== -->
         <section
             class="section skills"
@@ -357,7 +336,6 @@
 
 
             <div class="skills-grid">
-
 
                 <!-- LANE 01 -->
                 <article
@@ -626,10 +604,7 @@
 
 
         <!-- ==================================================
-             Projects Section
-
-             GitHub API 결과를 동적으로 제공하는 영역.
-             aria-live로 상태 변경을 보조 기술에 전달한다.
+             Projects
         =================================================== -->
         <section
             class="section projects"
@@ -659,10 +634,6 @@
             </header>
 
 
-            <!--
-                프로젝트 언어 필터는 동일한 목적의 버튼 묶음이므로
-                role="group"과 aria-label을 사용한다.
-            -->
             <div
                 class="project-filters"
                 id="project-filters"
@@ -689,9 +660,10 @@
 
 
         <!-- ==================================================
-             Contact Section
+             Contact
 
-             입력 오류와 전송 상태를 aria-live로 전달한다.
+             HTML의 minlength / maxlength와
+             JavaScript Custom Validation의 기준을 동일하게 유지한다.
         =================================================== -->
         <section
             class="section contact"
@@ -742,6 +714,8 @@
                         id="name"
                         name="name"
                         autocomplete="name"
+                        minlength="2"
+                        maxlength="30"
                         aria-describedby="name-error"
                         required
                     >
@@ -768,6 +742,7 @@
                         id="email"
                         name="email"
                         autocomplete="email"
+                        maxlength="100"
                         aria-describedby="email-error"
                         required
                     >
@@ -793,6 +768,8 @@
                         id="message"
                         name="message"
                         rows="6"
+                        minlength="10"
+                        maxlength="1000"
                         aria-describedby="message-error"
                         required
                     ></textarea>
@@ -817,10 +794,6 @@
                 </button>
 
 
-                <!--
-                    Form 전송 성공 / 실패 상태를
-                    스크린리더 사용자에게 전달한다.
-                -->
                 <p
                     class="form-status"
                     aria-live="polite"
@@ -835,9 +808,6 @@
 
     <!-- ==================================================
          Scroll Top
-
-         아이콘 자체보다 버튼의 목적이 중요하므로
-         aria-label로 기능을 설명한다.
     =================================================== -->
     <button
         class="scroll-top"
@@ -849,9 +819,7 @@
 
 
     <!-- ==================================================
-         Footer Landmark
-
-         저작권 정보와 외부 프로필 탐색 영역을 제공한다.
+         Footer
     =================================================== -->
     <footer
         class="site-footer"
@@ -864,13 +832,6 @@
         </p>
 
 
-        <!--
-            Footer 내부에서 외부 프로필 이동을 담당하는
-            별도의 Navigation Landmark.
-
-            메인 내비게이션과 목적을 구분하기 위해
-            aria-label="소셜 링크"를 사용한다.
-        -->
         <nav
             class="social-links"
             aria-label="소셜 링크"

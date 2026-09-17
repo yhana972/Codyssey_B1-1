@@ -1,48 +1,39 @@
 # NAHYEON // DEV.POOL
 
-> 클라이언트 개발 경험을 기반으로 Web, App, AI 영역까지 확장하고 있는 개발자 포트폴리오
+> Client / XR 경험을 기반으로 Web / App / Service / AI까지 확장하는 개발자 포트폴리오
 
-HTML, CSS, JavaScript만으로 제작한 반응형 개인 포트폴리오입니다.  
-수영장의 레인(Lane)을 개발 경험의 영역에 빗대어 **Client / XR → Web / App → Service / AI**로 확장되는 흐름을 표현했습니다.
+HTML, CSS, Vanilla JavaScript로 제작한 반응형 포트폴리오입니다.  
+수영장의 Lane을 개발 경험의 영역에 빗대어 **Client / XR → Web / App → Service / AI** 흐름을 표현했습니다.
 
-Light Mode는 낮의 수영장과 수면의 물결을, Dark Mode는 야간 수영장의 조명과 윤슬을 모티브로 디자인했습니다.
-
----
-
-## 🔗 Demo
-
-- GitHub Repository: [repository](https://github.com/yhana972/Codyssey_B1-1)
-- GitHub Pages: [배포페이지](https://yhana972.github.io/Codyssey_B1-1/)
+- Repository: https://github.com/yhana972/Codyssey_B1-1
+- GitHub Pages: https://yhana972.github.io/Codyssey_B1-1/
 
 ---
 
-# 🖼 Preview
+## Preview
 
-## Desktop / Light Mode
-
+### Desktop / Light
 ![Desktop Light](images/readme/desktop-light.png)
 
-## Desktop / Dark Mode
-
+### Desktop / Dark
 ![Desktop Dark](images/readme/desktop-dark.png)
 
-## Mobile
-
+### Mobile / 375px
 ![Mobile](images/readme/mobile.png)
 
 ---
 
-# 📱 Responsive Design
+# 1. Responsive Design
 
 Mobile First 방식으로 제작했습니다.
 
 | 구분 | 기준 | 주요 변화 |
 | --- | ---: | --- |
-| Mobile | 768px 미만 | 햄버거 메뉴, 1열 중심 레이아웃 |
+| Mobile | 768px 미만 | Hamburger Navigation, 1열 중심 |
 | Tablet | 768px 이상 | 가로 Navigation, Skills 2열 |
-| Desktop | 1024px 이상 | 3개 Pool Lane, Skills 3열 |
+| Desktop | 1024px 이상 | 3-Lane 구조, Skills 3열 |
 
-Project 영역은 CSS Grid의 `auto-fit`, `minmax()`를 사용해 화면 폭에 따라 카드 수가 자동으로 변경됩니다.
+Project 영역은 `auto-fit + minmax()`를 사용합니다.
 
 ```css
 .projects-grid {
@@ -58,23 +49,71 @@ Project 영역은 CSS Grid의 `auto-fit`, `minmax()`를 사용해 화면 폭에 
 }
 ```
 
----
+## Breakpoint Style Snapshot
 
-# ✅ Responsive Verification
+### Mobile
 
-대표 Viewport에서 실제 레이아웃을 확인했습니다.
+```css
+.skills-grid {
+    grid-template-columns:
+        minmax(0, 1fr);
+}
+
+.nav-list {
+    display: none;
+}
+```
+
+### Tablet — 768px
+
+```css
+@media (min-width: 768px) {
+    .nav-list,
+    .nav-list.active {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .menu-toggle {
+        display: none;
+    }
+
+    .skills-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+}
+```
+
+### Desktop — 1024px
+
+```css
+@media (min-width: 1024px) {
+    .skills-grid {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+    }
+
+    .lane-line:nth-child(2) {
+        left: 33.333333%;
+    }
+
+    .lane-line:nth-child(3) {
+        left: 66.666666%;
+    }
+}
+```
+
+## Responsive Verification
 
 | Viewport | 확인 항목 | 결과 |
 | ---: | --- | --- |
-| 375px | 햄버거 메뉴, 1열 카드, 가로 스크롤 없음 | ✅ |
-| 768px | Navigation 전환, Skills 2열, 레이아웃 깨짐 없음 | ✅ |
-| 1024px | 3-Lane 구조, Skills 3열, Project Grid 정상 | ✅ |
-| 1440px | Desktop 최대 너비, 카드 정렬, 여백 정상 | ✅ |
-
-## 검증 스크린샷
+| 375px | Hamburger, 1열, 가로 Overflow 없음 | ✅ |
+| 768px | Navigation 전환, Skills 2열 | ✅ |
+| 1024px | 3-Lane, Skills 3열 | ✅ |
+| 1440px | Desktop 정렬 / 여백 정상 | ✅ |
 
 ### 375px
-Chrome DevTools에서 Viewport Width를 `375px`로 설정해 확인했습니다.
 ![Responsive 375](images/readme/mobile.png)
 
 ### 768px
@@ -84,38 +123,31 @@ Chrome DevTools에서 Viewport Width를 `375px`로 설정해 확인했습니다.
 ![Responsive 1024](images/readme/responsive-1024.png)
 
 ### 1440px
-![Responsive 1440](images/readme/responsive-1440.png)
-
-### 반응형 체크리스트
-
-- [x] 가로 스크롤이 발생하지 않음
-- [x] 768px 미만에서 햄버거 메뉴 표시
-- [x] 768px 이상에서 가로 Navigation 표시
-- [x] Skills 카드가 Mobile 1열 → Tablet 2열 → Desktop 3열로 변경
-- [x] Project Grid가 `auto-fit + minmax()`로 자동 재배치
-- [x] Contact Form이 화면 폭을 넘지 않음
-- [x] 이미지 및 카드가 Container 밖으로 넘치지 않음
-- [x] Light / Dark Mode 모두 동일한 반응형 구조 유지
+![Responsive 1440](images/readme/desktop-light.png)
 
 ---
 
-# 🧭 Layout 선택 이유
+# 2. Layout 선택 이유
 
 ## Navigation — Flexbox
 
-Navigation은 로고, 메뉴, 버튼처럼 **한 방향으로 정렬되는 1차원 구조**이기 때문에 Flexbox를 사용했습니다.  
-`align-items`, `justify-content`, `gap`을 이용해 정렬과 간격 조절이 단순하고, Mobile에서 메뉴 방향을 변경하기에도 적합합니다.
+Navigation은 로고, 메뉴, 버튼을 한 방향으로 배치하는 **1차원 구조**이므로 Flexbox를 사용했습니다.
+
+- 장점: 정렬과 간격 제어가 단순하고 Mobile/Desktop 전환이 쉬움
+- 단점: 행·열을 동시에 다루는 카드 Layout에는 Grid보다 불편함
 
 ## Projects — CSS Grid
 
-Project Card는 여러 개의 카드를 **행과 열 형태로 배치하는 2차원 구조**이므로 CSS Grid를 사용했습니다.  
-`auto-fit`과 `minmax()`를 조합해 별도의 카드 개수 계산 없이 Viewport 폭에 따라 열 개수가 자동으로 변경되도록 구성했습니다.
+Project Card는 여러 카드를 행과 열로 배치하는 **2차원 구조**이므로 Grid를 사용했습니다.
+
+- 장점: `auto-fit + minmax()`로 열 개수를 자동 계산할 수 있음
+- 단점: 단순 일렬 메뉴에는 Flexbox보다 설정이 많음
 
 ---
 
-# 🧠 Application State
+# 3. Application State
 
-애플리케이션에서 변경되는 상태는 하나의 `STATE` 객체로 관리합니다.
+변경 가능한 UI 상태는 하나의 `STATE` 객체에서 관리합니다.
 
 ```javascript
 const STATE = {
@@ -123,122 +155,135 @@ const STATE = {
         current: "light",
         hasUserPreference: false,
     },
+
     menu: {
         isOpen: false,
     },
+
     projects: {
         repositories: [],
         filter: "ALL",
         status: "idle",
     },
+
     contact: {
         isSubmitting: false,
     },
 };
 ```
 
-기본 흐름은 다음과 같습니다.
+기본 흐름:
 
 ```text
-사용자 이벤트
+Event
 ↓
 STATE 변경
 ↓
-render 함수 호출
+Render 함수
 ↓
-화면 반영
+UI 반영
+```
+
+## State 불변성 확장 전략
+
+현재 프로젝트는 상태 규모가 작아 필요한 속성만 직접 갱신합니다.
+
+```javascript
+STATE.projects.filter =
+    "JavaScript";
+```
+
+규모가 커질 경우에는 Spread Syntax를 이용한 Immutable Update Pattern을 적용할 수 있습니다.
+
+```javascript
+const nextState = {
+    ...STATE,
+
+    projects: {
+        ...STATE.projects,
+        filter: "JavaScript",
+    },
+};
 ```
 
 ---
 
-# 🎨 Theme
+# 4. Theme
 
-## Theme 초기화 우선순위
+초기 Theme 우선순위:
 
 ```text
 localStorage 사용자 설정
 ↓
-저장된 값이 없으면
+저장값이 없으면
 ↓
-prefers-color-scheme 시스템 설정
+prefers-color-scheme
 ```
 
-코드에도 동일한 흐름을 주석으로 명시했습니다.
+사용자가 Theme Button을 누르면 이후에는 시스템 설정보다 사용자 선택을 우선합니다.
 
-```javascript
-// 초기 테마 우선순위:
-// localStorage 사용자 설정 → 시스템 테마 설정
-```
+## Theme 전환 시 이미지 / 외부 자원
 
-사용자가 Theme 버튼을 직접 누르면 해당 값을 `localStorage`에 저장하고, 이후에는 시스템 설정보다 사용자 선택을 우선합니다.
+현재 Theme 변경은 CSS Custom Properties와 `data-theme`만 변경합니다.
+
+- Light / Dark에서 동일한 Profile Image 사용
+- Theme 전환 시 이미지 재요청 없음
+- 별도 외부 Theme Image 없음
+- Pointer / Surface 효과는 CSS 변수와 Gradient로 변경
+- Theme 변경으로 추가 Network Request가 발생하지 않음
+
+향후 Theme별 이미지를 사용할 경우 Preload 또는 Fade Transition을 적용할 수 있습니다.
 
 ---
 
-# ✨ Scroll Reveal Animation
+# 5. Scroll Interaction
 
-`IntersectionObserver`를 사용하며 Threshold는 `0.2`입니다.
+## Scroll Reveal
+
+`IntersectionObserver`의 Threshold는 `0.2`입니다.
 
 ```javascript
-const revealObserver =
-    new IntersectionObserver(
-        handleRevealEntries,
-        {
-            threshold: 0.2,
-        }
-    );
+new IntersectionObserver(
+    handleRevealEntries,
+    {
+        threshold: 0.2,
+    }
+);
 ```
 
-동작 흐름:
+동작:
 
 ```text
 Viewport 진입
 ↓
-IntersectionObserver
-↓
-isIntersecting 확인
+isIntersecting
 ↓
 visible Class 추가
 ↓
-Opacity / Translate Animation
+Animation
 ↓
 unobserve()
 ```
 
-## Scroll Reveal 검증
+### 성능 고려
 
-- [x] 페이지 최초 진입 시 화면 밖 요소는 숨김 상태
-- [x] 요소가 Viewport에 진입하면 자연스럽게 표시
-- [x] 한 번 표시된 요소는 `unobserve()` 처리
-- [x] `prefers-reduced-motion` 환경에서는 즉시 표시
-- [x] Threshold `0.2` 적용 확인
+- 표시 완료 후 `unobserve()`
+- `scroll` Event에 `passive: true`
+- Scroll 중 DOM 재생성 없이 Class만 변경
+- `prefers-reduced-motion`에서 Animation 생략
+- Fine Pointer 환경에서만 Pointer Effect 활성화
+
+별도의 FPS Benchmark는 수행하지 않았으며, 실제로 측정하지 않은 수치는 문서에 기재하지 않았습니다.
 
 ![Scroll Reveal](images/readme/scroll-reveal.png)
 
 ---
 
-# 🐙 GitHub API
+# 6. GitHub API
 
-GitHub REST API를 사용해 Repository를 동적으로 가져옵니다.
+GitHub REST API를 `fetch + async/await + try/catch`로 처리합니다.
 
-```text
-https://api.github.com/users/{username}/repos
-```
-
-현재 사용자:
-
-```text
-yhana972
-```
-
-사용 문법:
-
-```text
-fetch()
-async / await
-try / catch
-```
-
-## API 상태 처리
+지원 상태:
 
 - Loading
 - Success
@@ -249,20 +294,9 @@ try / catch
 - 일반 HTTP Error
 - Retry
 
----
+## API 오류 검증
 
-# 🧪 GitHub API Error Test
-
-## 404 — User Not Found
-
-### 재현 방법
-
-테스트 시 GitHub Username을 존재하지 않는 값으로 임시 변경합니다.
-
-```javascript
-const GITHUB_USERNAME =
-    "this-user-does-not-exist-test";
-```
+### 404
 
 예상 Console:
 
@@ -278,311 +312,235 @@ GitHub 사용자를 찾을 수 없습니다.
 [다시 시도]
 ```
 
-테스트 후 실제 Username으로 복구합니다.
-
 ![GitHub API 404 Error Test](images/readme/api-error-404.png)
 
-## 403 — Rate Limit
+### 403 / 429
 
-예상 Console:
-
-```text
-[GitHub API] Rate Limit Error (403)
-[GitHub API Error] Error: RATE_LIMIT
-```
-
-예상 UI:
-
-```text
-GitHub API 요청 한도를 초과했습니다.
-잠시 후 다시 시도해주세요.
-```
-
-## 429 — Too Many Requests
-
-예상 Console:
-
-```text
-[GitHub API] Rate Limit Error (429)
-[GitHub API Error] Error: RATE_LIMIT
-```
-
-예상 UI:
-
-```text
-GitHub API 요청 한도를 초과했습니다.
-잠시 후 다시 시도해주세요.
-```
-
-## Empty
-
-Repository 배열이 비어 있는 경우:
-
-```text
-표시할 프로젝트가 없습니다.
-```
-
-상태 UI를 표시합니다.
-
----
-
-# 🔁 API Retry Policy
-
-API 실패 시 자동 반복 요청은 수행하지 않습니다.
-
-특히 `403`, `429`와 같은 Rate Limit 상황에서는 자동 재시도가 제한을 악화시킬 수 있으므로 다음 정책을 사용합니다.
+Rate Limit 상황에서는 자동 재시도를 반복하지 않습니다.
 
 ```text
 API 실패
 ↓
-Error UI 표시
+Error UI
 ↓
-사용자에게 상태 안내
+Retry Button
 ↓
-Retry 버튼 제공
-↓
-사용자가 명시적으로 다시 시도
+사용자 명시적 재시도
 ```
 
-현재 프로젝트는 **사용자 주도 수동 재시도 정책**을 사용합니다.  
-향후 중요도가 높은 API에서는 Exponential Backoff 기반 자동 재시도를 추가할 수 있습니다.
+## Timeout / Retry 확장 전략
+
+현재는 사용자 주도 Retry만 사용합니다.
+
+향후에는:
+
+```text
+fetch()
+↓
+AbortController
+↓
+Timeout 시 요청 취소
+↓
+Network Error에 한해 제한된 자동 재시도
+↓
+403 / 429는 자동 반복 제외
+```
+
+방식으로 확장할 수 있습니다.
 
 ---
 
-# 🔎 Project Filter
+# 7. Project Filter / 대량 데이터 전략
 
-Repository의 `language` 값을 기준으로 Filter Button을 자동 생성합니다.
+Repository의 `language`를 기준으로 `map()`, `filter()`, `Set`을 사용해 Filter Button을 생성합니다.
 
-## Array Method 사용 목적
+- `map()` : Repository → Language / Card HTML 변환
+- `filter()` : null 제거 / 선택 Language 추출
+- `forEach()` : 여러 DOM 요소에 같은 처리 적용
 
-### `map()`
+현재 API는 `per_page=30`으로 제한되어 있어 전체 Rendering 방식을 사용합니다.
 
-Repository에서 Language만 추출하거나 Project Card HTML로 변환할 때 사용합니다.
+대량 데이터에서는 다음을 고려할 수 있습니다.
 
-### `filter()`
-
-`null` Language를 제거하거나 사용자가 선택한 Language와 일치하는 Repository만 추출할 때 사용합니다.
-
-### `forEach()`
-
-각 DOM 요소에 동일한 동작을 적용할 때 사용합니다.
-
-```javascript
-[
-    nameInput,
-    emailInput,
-    messageInput,
-].forEach(
-    clearError
-);
+```text
+API Pagination
+↓
+페이지 단위 요청
+↓
+Lazy Rendering
+↓
+Infinite Scroll
+↓
+필요 시 Virtual List
 ```
+
+현재 규모에서는 단순한 전체 Render가 가독성과 학습 목적에 적합합니다.
 
 ---
 
-# 📮 Contact Form
+# 8. Contact Form Validation
 
-Form 구성:
+검증 규칙:
 
-- 이름
-- 이메일
-- 메시지
+| 필드 | 규칙 |
+| --- | --- |
+| 이름 | 필수, 2~30자 |
+| 이메일 | 필수, 이메일 형식, 최대 100자 |
+| 메시지 | 필수, 10~1000자 |
 
-Custom Validation을 JavaScript로 구현했습니다.
+HTML의 `minlength`, `maxlength`와 JavaScript Custom Validation 기준을 동일하게 유지합니다.
 
-검증 실패 시 해당 Input에:
+Validation 실패 시:
 
 ```text
 error class
 aria-invalid="true"
+aria-live="polite"
 ```
 
-를 적용하고, 각 필드 아래의 `aria-live="polite"` 영역에 Error Message를 출력합니다.
+를 적용합니다.
 
 실제 전송은 Formspree를 사용합니다.
 
-```text
-Submit
-↓
-preventDefault()
-↓
-Validation
-↓
-FormData 생성
-↓
-STATE.contact.isSubmitting = true
-↓
-fetch()
-↓
-Formspree
-↓
-Success / Error
-```
-
 ---
 
-# ♿ Accessibility Verification
+# 9. Accessibility
 
-접근성 관련 항목을 수동으로 검증했습니다.
-
-| 항목 | 검증 내용 | 결과 |
-| --- | --- | --- |
-| Semantic HTML | `header`, `nav`, `main`, `section`, `article`, `footer` 사용 | ✅ |
-| Landmark 구분 | 메인 Navigation과 Footer Social Navigation에 각각 `aria-label` 적용 | ✅ |
-| Image | Profile Image에 `alt` 적용 | ✅ |
-| Form Label | 모든 Input에 `label for` ↔ `id` 연결 | ✅ |
-| Error 안내 | Error 영역에 `aria-live="polite"` 적용 | ✅ |
-| Invalid 상태 | 검증 실패 시 `aria-invalid="true"` 적용 | ✅ |
-| Menu 상태 | Hamburger Button의 `aria-expanded` 값 변경 | ✅ |
-| Filter 상태 | Project Filter에 `aria-pressed` 적용 | ✅ |
-| Loading 상태 | `aria-busy` 사용 | ✅ |
-| Keyboard | Tab 이동 가능 | ✅ |
-| Escape | 열린 Mobile Menu를 `Escape`로 닫을 수 있음 | ✅ |
-| Focus | `:focus-visible` 표시 | ✅ |
-| Reduced Motion | `prefers-reduced-motion` 대응 | ✅ |
-| Hero Typing | Screen Reader에는 완성 문장만 제공 | ✅ |
-
-## 접근성 테스트 절차
-
-1. `Tab` 키로 Navigation, Button, Form 요소 이동
-2. Focus Ring 표시 확인
-3. Mobile Menu를 열고 `Escape`로 닫기
-4. Contact Form을 빈 상태로 제출
-5. Error Message 및 `aria-invalid` 변경 확인
-6. Browser Accessibility Tree에서 `aria-live`, `aria-expanded`, `aria-pressed` 확인
-7. OS의 Reduce Motion 설정을 켜고 Animation 감소 확인
-
-> 별도의 상용 Screen Reader 전문 테스트까지 수행한 것은 아니며, 브라우저 Accessibility Tree와 Keyboard 중심의 기본 검증을 수행했습니다.
-
----
-
-# ♿ Landmark 설계
+## Landmark 목적
 
 ```text
 Header
 └── nav aria-label="메인 내비게이션"
+    → 페이지 내부 이동
 
 Main
-├── Hero     → aria-labelledby="hero-title"
-├── About    → aria-labelledby="about-title"
-├── Skills   → aria-labelledby="skills-title"
-├── Projects → aria-labelledby="projects-title"
-└── Contact  → aria-labelledby="contact-title"
+├── Hero
+├── About
+├── Skills
+├── Projects
+└── Contact
+    → 핵심 콘텐츠
 
 Footer
 └── nav aria-label="소셜 링크"
+    → 외부 개발자 프로필 이동
 ```
+
+## 수동 검증 결과
+
+| 항목 | 결과 |
+| --- | --- |
+| Semantic HTML | ✅ |
+| `alt` / `label` | ✅ |
+| `aria-expanded` | ✅ |
+| `aria-pressed` | ✅ |
+| `aria-invalid` | ✅ |
+| `aria-live` | ✅ |
+| `aria-busy` | ✅ |
+| Keyboard Tab | ✅ |
+| Escape Menu Close | ✅ |
+| Focus Visible | ✅ |
+| Reduced Motion | ✅ |
+
+테스트 경로:
+
+```text
+Tab
+↓
+Navigation
+↓
+Theme Button
+↓
+Hero Action
+↓
+Project Filter
+↓
+Contact Form
+↓
+Submit
+```
+
+실제로 수행하지 않은 전문 VoiceOver/NVDA 전체 시나리오 및 Lighthouse 결과는 완료 항목으로 표시하지 않았습니다.
 
 ---
 
-# 🎨 CSS Variable Structure
+# 10. CSS Variable Structure
 
-CSS 변수는 역할별로 그룹화했습니다.
+전역 변수는 역할별로 분리했습니다.
 
 ```text
 1. Theme Colors
 2. Pool Lane Colors
 3. Background / Surface
-4. Shadow / Focus Effects
-5. Layout
-6. Spacing
-7. Border Radius
-8. Motion
-9. Pointer Position
+4. Shadow / Focus
+5. Typography
+6. Layout
+7. Spacing
+8. Border Radius
+9. Motion
+10. Pointer Position
 ```
 
-Dark Mode에서는 Layout과 Spacing은 유지하고 색상과 Surface 관련 변수만 Override합니다.
+## Typography Scale
+
+```css
+--font-size-xs: 0.8rem;
+--font-size-sm: 0.9rem;
+--font-size-base: 1rem;
+--font-size-md: 1.3rem;
+
+--font-size-lg:
+    clamp(1.8rem, 5vw, 2.8rem);
+
+--font-size-hero:
+    clamp(2.2rem, 8vw, 4.5rem);
+
+--font-weight-normal: 400;
+--font-weight-semibold: 600;
+--font-weight-bold: 700;
+```
+
+Font Size / Weight / Family / Line Height를 변수화해 유지보수 범위를 줄였습니다.
 
 ---
 
-# 🔄 State → Render
+# 11. JavaScript 모듈화 계획
 
-## Theme
+현재는 Vanilla JavaScript의 전체 흐름을 한 파일에서 학습하기 위해 `main.js`를 단일 Entry Point로 유지합니다.
 
-```text
-Theme Button
-↓
-STATE.theme.current
-↓
-renderTheme()
-↓
-data-theme 변경
-```
-
-## Navigation
+현재:
 
 ```text
-Menu Click
-↓
-STATE.menu.isOpen
-↓
-renderMenu()
-↓
-class / aria 변경
+js/
+└── main.js
 ```
 
-## Projects
+확장 시:
 
 ```text
-API Response
-↓
-STATE.projects.repositories
-↓
-renderProjectFilters()
-↓
-renderFilteredProjects()
+js/
+├── state.js
+├── theme.js
+├── navigation.js
+├── scroll.js
+├── projects.js
+├── contact.js
+└── main.js
 ```
 
-## Project Filter
-
-```text
-Filter Click
-↓
-STATE.projects.filter
-↓
-filter()
-↓
-renderProjects()
-```
-
-## Contact
-
-```text
-Submit
-↓
-Validation
-↓
-STATE.contact.isSubmitting
-↓
-fetch()
-↓
-Success / Error
-```
+| 파일 | 역할 |
+| --- | --- |
+| `state.js` | 상태 관리 |
+| `theme.js` | Theme / Storage |
+| `navigation.js` | Hamburger / Navigation |
+| `scroll.js` | Scroll / Reveal |
+| `projects.js` | GitHub API / Filter |
+| `contact.js` | Validation / Formspree |
+| `main.js` | 초기화 |
 
 ---
 
-# 🧩 ES6+ 문법
-
-프로젝트에서 사용한 주요 JavaScript 문법:
-
-- `const`
-- `let`
-- Arrow Function
-- Template Literal
-- Destructuring
-- `map()`
-- `filter()`
-- `forEach()`
-- Spread Syntax
-- `async / await`
-- `try / catch`
-- `Set`
-- `Array.from()`
-
-`var`와 인라인 Event Handler는 사용하지 않았습니다.
-
----
-
-# 🛠 Tech Stack
+# 12. Tech Stack
 
 ## Frontend
 
@@ -601,11 +559,9 @@ Success / Error
 
 ---
 
-# 🚀 Deployment
+# 13. Deployment
 
-GitHub Pages를 이용해 정적 웹사이트로 배포했습니다.
-
-사용 설정:
+GitHub Pages 설정:
 
 ```text
 Source:
@@ -618,30 +574,14 @@ Folder:
 / (root)
 ```
 
-배포 흐름:
-
-```text
-Local 변경
-↓
-git add .
-↓
-git commit
-↓
-git push
-↓
-GitHub main Branch
-↓
-GitHub Pages 자동 반영
-```
-
 별도의 Build Tool이나 Bundler는 사용하지 않습니다.
 
 ---
 
-# 📂 Project Structure
+# 14. Project Structure
 
 ```text
-portfolio/
+Codyssey_B1-1/
 │
 ├── index.html
 ├── README.md
@@ -658,104 +598,47 @@ portfolio/
         ├── desktop-light.png
         ├── desktop-dark.png
         ├── mobile.png
-        ├── responsive-375.png
         ├── responsive-768.png
         ├── responsive-1024.png
-        ├── responsive-1440.png
-        └── scroll-reveal.png
+        ├── scroll-reveal.png
+        └── api-error-404.png
 ```
 
 ---
 
-# ✅ 구현 현황
+# 15. 구현 현황
 
 ## 필수 미션
 
 - [x] Semantic HTML
-- [x] Hero / About / Skills / Projects / Contact / Footer
-- [x] Mobile First
-- [x] 768px / 1024px Breakpoint
-- [x] Responsive Web
-- [x] Flexbox Navigation
-- [x] CSS Grid
-- [x] `auto-fit`
-- [x] `minmax()`
+- [x] Responsive / Mobile First
+- [x] Flexbox / Grid
+- [x] `auto-fit` / `minmax()`
 - [x] Hamburger Menu
 - [x] Smooth Scroll
-- [x] Scroll Header
-- [x] Scroll Top Button
-- [x] Light / Dark Theme
-- [x] localStorage
+- [x] Scroll Top
+- [x] Theme / localStorage
 - [x] IntersectionObserver
 - [x] Form Validation
 - [x] GitHub API
-- [x] Loading / Success / Error / Empty
-- [x] ES6+ 문법
-- [x] State → Render 구조
-- [x] 단일 `STATE` 객체
+- [x] API State UI
+- [x] ES6+
+- [x] 단일 `STATE`
 - [x] 명명 Event Handler
 - [x] Accessibility 기본 대응
 
 ## 선택 미션
 
-- [x] GitHub Project Language Filter
-- [x] Hero Typing Animation
-- [x] System Dark Mode
-- [x] 실제 Contact Form 전송
-
----
-
-# 🧪 Final QA Checklist
-
-## UI
-
-- [x] 375px
-- [x] 768px
-- [x] 1024px
-- [x] 1440px
-- [x] Light Mode
-- [x] Dark Mode
-- [x] Horizontal Overflow 없음
-
-## Interaction
-
-- [x] Hamburger
-- [x] Escape
-- [x] Smooth Scroll
-- [x] Scroll Top
-- [x] Header Scroll State
-- [x] Scroll Reveal
+- [x] GitHub Language Filter
 - [x] Hero Typing
-- [x] Theme Toggle
-- [x] System Theme
-- [x] Project Filter
-
-## API / Form
-
-- [x] GitHub Success
-- [x] GitHub Empty UI
-- [x] GitHub Error UI
-- [x] GitHub Retry
-- [x] Contact Validation
+- [x] System Dark Mode
 - [x] Formspree 실제 전송
 
-## Accessibility
-
-- [x] Keyboard Tab
-- [x] Focus Visible
-- [x] aria-expanded
-- [x] aria-pressed
-- [x] aria-invalid
-- [x] aria-live
-- [x] aria-busy
-- [x] Reduced Motion
-
 ---
 
-# 👩‍💻 Developer
+# Developer
 
-**NaHyeon Kim**
-
+**NaHyeon Kim**  
 Client Developer
 
 GitHub  
