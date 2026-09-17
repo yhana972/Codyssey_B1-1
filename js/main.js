@@ -2,123 +2,70 @@
 // DOM
 // ==========================================================
 
-const themeToggle =
-    document.querySelector(".theme-toggle");
+const themeToggle = document.querySelector(".theme-toggle");
+const siteNav = document.querySelector(".site-nav");
+const menuToggle = document.querySelector(".menu-toggle");
+const navList = document.querySelector(".nav-list");
+const navLinks = document.querySelectorAll(".nav-list a");
 
-const siteNav =
-    document.querySelector(".site-nav");
+const internalLinks = document.querySelectorAll(
+    'a[href^="#"]:not([href="#"])'
+);
 
-const menuToggle =
-    document.querySelector(".menu-toggle");
+const scrollTopButton = document.querySelector(".scroll-top");
+const siteHeader = document.querySelector(".site-header");
+const pointerEffect = document.querySelector(".pointer-effect");
+const revealElements = document.querySelectorAll("[data-reveal]");
 
-const navList =
-    document.querySelector(".nav-list");
+const typingText = document.querySelector("#typing-text");
+const typingCursor = document.querySelector(".typing-cursor");
 
-const navLinks =
-    document.querySelectorAll(".nav-list a");
+const contactForm = document.querySelector("#contact-form");
+const submitButton = contactForm.querySelector(".submit-button");
+const submitLabel = submitButton.querySelector(".submit-label");
 
-const internalLinks =
-    document.querySelectorAll(
-        'a[href^="#"]:not([href="#"])'
-    );
+const nameInput = document.querySelector("#name");
+const emailInput = document.querySelector("#email");
+const messageInput = document.querySelector("#message");
+const formStatus = document.querySelector(".form-status");
 
-const scrollTopButton =
-    document.querySelector(".scroll-top");
-
-const siteHeader =
-    document.querySelector(".site-header");
-
-const pointerEffect =
-    document.querySelector(".pointer-effect");
-
-const revealElements =
-    document.querySelectorAll("[data-reveal]");
-
-const typingText =
-    document.querySelector("#typing-text");
-
-const typingCursor =
-    document.querySelector(".typing-cursor");
-
-const contactForm =
-    document.querySelector(".contact-form");
-
-const nameInput =
-    document.querySelector("#name");
-
-const emailInput =
-    document.querySelector("#email");
-
-const messageInput =
-    document.querySelector("#message");
-
-const formStatus =
-    document.querySelector(".form-status");
-
-const projectsList =
-    document.querySelector("#projects-list");
-
-const projectFilters =
-    document.querySelector("#project-filters");
+const projectsList = document.querySelector("#projects-list");
+const projectFilters = document.querySelector("#project-filters");
 
 
 // ==========================================================
 // CONFIG
 // ==========================================================
 
-const GITHUB_USERNAME =
-    "yhana972";
-
+const GITHUB_USERNAME = "yhana972";
 
 const GITHUB_API_URL =
     `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&direction=desc&per_page=30`;
 
+const HEADER_SCROLL_THRESHOLD = 60;
+const SCROLL_TOP_THRESHOLD = 300;
+const TABLET_BREAKPOINT = 768;
+const REVEAL_THRESHOLD = 0.2;
 
-const HEADER_SCROLL_THRESHOLD =
-    60;
+const TYPING_SPEED = 90;
+const TYPING_START_DELAY = 450;
 
+const hasFinePointer = window.matchMedia(
+    "(pointer: fine)"
+).matches;
 
-const SCROLL_TOP_THRESHOLD =
-    300;
-
-
-const TABLET_BREAKPOINT =
-    768;
-
-
-const REVEAL_THRESHOLD =
-    0.2;
-
-
-const TYPING_SPEED =
-    90;
-
-
-const TYPING_START_DELAY =
-    450;
-
-
-const hasFinePointer =
-    window.matchMedia(
-        "(pointer: fine)"
-    ).matches;
-
-
-const prefersReducedMotion =
-    window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
-    ).matches;
+const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+).matches;
 
 
 // ==========================================================
 // SYSTEM THEME
 // ==========================================================
 
-const systemThemeQuery =
-    window.matchMedia(
-        "(prefers-color-scheme: dark)"
-    );
-
+const systemThemeQuery = window.matchMedia(
+    "(prefers-color-scheme: dark)"
+);
 
 const getSystemTheme = () => {
     return systemThemeQuery.matches
@@ -133,8 +80,7 @@ const getSystemTheme = () => {
 
 const updateThemeButton = (theme) => {
     if (theme === "dark") {
-        themeToggle.textContent =
-            "☀";
+        themeToggle.textContent = "☀";
 
         themeToggle.setAttribute(
             "aria-label",
@@ -144,10 +90,7 @@ const updateThemeButton = (theme) => {
         return;
     }
 
-
-    themeToggle.textContent =
-        "☾";
-
+    themeToggle.textContent = "☾";
 
     themeToggle.setAttribute(
         "aria-label",
@@ -157,42 +100,25 @@ const updateThemeButton = (theme) => {
 
 
 const applyTheme = (theme) => {
-    document.documentElement
-        .dataset
-        .theme =
-        theme;
+    document.documentElement.dataset.theme = theme;
 
-
-    updateThemeButton(
-        theme
-    );
+    updateThemeButton(theme);
 };
 
 
-const savedTheme =
-    localStorage.getItem(
-        "theme"
-    );
-
+const savedTheme = localStorage.getItem("theme");
 
 const hasSavedTheme =
     savedTheme === "dark" ||
     savedTheme === "light";
 
+let currentTheme = hasSavedTheme
+    ? savedTheme
+    : getSystemTheme();
 
-let currentTheme =
-    hasSavedTheme
-        ? savedTheme
-        : getSystemTheme();
+let hasUserThemePreference = hasSavedTheme;
 
-
-let hasUserThemePreference =
-    hasSavedTheme;
-
-
-applyTheme(
-    currentTheme
-);
+applyTheme(currentTheme);
 
 
 themeToggle.addEventListener(
@@ -203,15 +129,9 @@ themeToggle.addEventListener(
                 ? "dark"
                 : "light";
 
+        hasUserThemePreference = true;
 
-        hasUserThemePreference =
-            true;
-
-
-        applyTheme(
-            currentTheme
-        );
-
+        applyTheme(currentTheme);
 
         localStorage.setItem(
             "theme",
@@ -224,22 +144,15 @@ themeToggle.addEventListener(
 systemThemeQuery.addEventListener(
     "change",
     (event) => {
-        if (
-            hasUserThemePreference
-        ) {
+        if (hasUserThemePreference) {
             return;
         }
 
+        currentTheme = event.matches
+            ? "dark"
+            : "light";
 
-        currentTheme =
-            event.matches
-                ? "dark"
-                : "light";
-
-
-        applyTheme(
-            currentTheme
-        );
+        applyTheme(currentTheme);
     }
 );
 
@@ -253,80 +166,45 @@ const runHeroTyping = () => {
         return;
     }
 
-
     const fullText =
-        typingText.dataset.text ||
-        "";
-
-
-    /*
-        한글도 안전하게 한 글자씩 처리하기 위해
-        Array.from() 사용.
-    */
+        typingText.dataset.text || "";
 
     const characters =
-        Array.from(
-            fullText
-        );
+        Array.from(fullText);
 
-
-    /*
-        사용자가 동작 감소 옵션을 사용하면
-        타이핑하지 않고 바로 완성된 문장을 표시.
-    */
-
-    if (
-        prefersReducedMotion
-    ) {
+    if (prefersReducedMotion) {
         typingText.textContent =
             fullText;
 
-
         if (typingCursor) {
-            typingCursor.hidden =
-                true;
+            typingCursor.hidden = true;
         }
-
 
         return;
     }
 
+    typingText.textContent = "";
 
-    typingText.textContent =
-        "";
+    let typingIndex = 0;
 
+    const typeNextCharacter = () => {
+        if (
+            typingIndex >=
+            characters.length
+        ) {
+            return;
+        }
 
-    let typingIndex =
-        0;
+        typingText.textContent +=
+            characters[typingIndex];
 
+        typingIndex += 1;
 
-    const typeNextCharacter =
-        () => {
-
-            if (
-                typingIndex >=
-                characters.length
-            ) {
-                return;
-            }
-
-
-            typingText.textContent +=
-                characters[
-                    typingIndex
-                ];
-
-
-            typingIndex +=
-                1;
-
-
-            window.setTimeout(
-                typeNextCharacter,
-                TYPING_SPEED
-            );
-        };
-
+        window.setTimeout(
+            typeNextCharacter,
+            TYPING_SPEED
+        );
+    };
 
     window.setTimeout(
         typeNextCharacter,
@@ -348,12 +226,10 @@ const setMenuState = (isOpen) => {
         isOpen
     );
 
-
     menuToggle.setAttribute(
         "aria-expanded",
         String(isOpen)
     );
-
 
     menuToggle.setAttribute(
         "aria-label",
@@ -361,7 +237,6 @@ const setMenuState = (isOpen) => {
             ? "메뉴 닫기"
             : "메뉴 열기"
     );
-
 
     menuToggle.textContent =
         isOpen
@@ -374,16 +249,11 @@ menuToggle.addEventListener(
     "click",
     () => {
         const isOpen =
-            !navList
-                .classList
-                .contains(
-                    "active"
-                );
+            !navList.classList.contains(
+                "active"
+            );
 
-
-        setMenuState(
-            isOpen
-        );
+        setMenuState(isOpen);
     }
 );
 
@@ -393,9 +263,7 @@ navLinks.forEach(
         link.addEventListener(
             "click",
             () => {
-                setMenuState(
-                    false
-                );
+                setMenuState(false);
             }
         );
     }
@@ -406,15 +274,12 @@ document.addEventListener(
     "click",
     (event) => {
         if (
-            !navList
-                .classList
-                .contains(
-                    "active"
-                )
+            !navList.classList.contains(
+                "active"
+            )
         ) {
             return;
         }
-
 
         if (
             siteNav.contains(
@@ -424,10 +289,7 @@ document.addEventListener(
             return;
         }
 
-
-        setMenuState(
-            false
-        );
+        setMenuState(false);
     }
 );
 
@@ -439,9 +301,7 @@ window.addEventListener(
             window.innerWidth >=
             TABLET_BREAKPOINT
         ) {
-            setMenuState(
-                false
-            );
+            setMenuState(false);
         }
     }
 );
@@ -451,19 +311,12 @@ document.addEventListener(
     "keydown",
     (event) => {
         if (
-            event.key ===
-                "Escape" &&
-
-            navList
-                .classList
-                .contains(
-                    "active"
-                )
+            event.key === "Escape" &&
+            navList.classList.contains(
+                "active"
+            )
         ) {
-            setMenuState(
-                false
-            );
-
+            setMenuState(false);
 
             menuToggle.focus();
         }
@@ -481,24 +334,18 @@ internalLinks.forEach(
             "click",
             (event) => {
                 const targetId =
-                    link.getAttribute(
-                        "href"
-                    );
-
+                    link.getAttribute("href");
 
                 const target =
                     document.querySelector(
                         targetId
                     );
 
-
                 if (!target) {
                     return;
                 }
 
-
                 event.preventDefault();
-
 
                 target.scrollIntoView({
                     behavior:
@@ -506,8 +353,7 @@ internalLinks.forEach(
                             ? "auto"
                             : "smooth",
 
-                    block:
-                        "start",
+                    block: "start",
                 });
             }
         );
@@ -520,24 +366,17 @@ internalLinks.forEach(
 // ==========================================================
 
 const updateScrollUI = () => {
-    scrollTopButton
-        .classList
-        .toggle(
-            "active",
+    scrollTopButton.classList.toggle(
+        "active",
+        window.scrollY >=
+            SCROLL_TOP_THRESHOLD
+    );
 
-            window.scrollY >=
-                SCROLL_TOP_THRESHOLD
-        );
-
-
-    siteHeader
-        .classList
-        .toggle(
-            "scrolled",
-
-            window.scrollY >=
-                HEADER_SCROLL_THRESHOLD
-        );
+    siteHeader.classList.toggle(
+        "scrolled",
+        window.scrollY >=
+            HEADER_SCROLL_THRESHOLD
+    );
 };
 
 
@@ -572,39 +411,28 @@ scrollTopButton.addEventListener(
 // POINTER EFFECT
 // ==========================================================
 
-const updatePointerEffect =
-    (event) => {
+const updatePointerEffect = (event) => {
+    const x = `${event.clientX}px`;
+    const y = `${event.clientY}px`;
 
-        const x =
-            `${event.clientX}px`;
+    document.documentElement
+        .style
+        .setProperty(
+            "--pointer-x",
+            x
+        );
 
+    document.documentElement
+        .style
+        .setProperty(
+            "--pointer-y",
+            y
+        );
 
-        const y =
-            `${event.clientY}px`;
-
-
-        document.documentElement
-            .style
-            .setProperty(
-                "--pointer-x",
-                x
-            );
-
-
-        document.documentElement
-            .style
-            .setProperty(
-                "--pointer-y",
-                y
-            );
-
-
-        pointerEffect
-            .classList
-            .add(
-                "active"
-            );
-    };
+    pointerEffect.classList.add(
+        "active"
+    );
+};
 
 
 if (hasFinePointer) {
@@ -616,18 +444,14 @@ if (hasFinePointer) {
         }
     );
 
-
-    document.documentElement
-        .addEventListener(
-            "mouseleave",
-            () => {
-                pointerEffect
-                    .classList
-                    .remove(
-                        "active"
-                    );
-            }
-        );
+    document.documentElement.addEventListener(
+        "mouseleave",
+        () => {
+            pointerEffect.classList.remove(
+                "active"
+            );
+        }
+    );
 }
 
 
@@ -644,11 +468,9 @@ if (
 ) {
     revealElements.forEach(
         (element) => {
-            element
-                .classList
-                .add(
-                    "visible"
-                );
+            element.classList.add(
+                "visible"
+            );
         }
     );
 } else {
@@ -658,12 +480,10 @@ if (
                 entries.forEach(
                     (entry) => {
                         if (
-                            !entry
-                                .isIntersecting
+                            !entry.isIntersecting
                         ) {
                             return;
                         }
-
 
                         entry.target
                             .classList
@@ -671,11 +491,9 @@ if (
                                 "visible"
                             );
 
-
-                        revealObserver
-                            .unobserve(
-                                entry.target
-                            );
+                        revealObserver.unobserve(
+                            entry.target
+                        );
                     }
                 );
             },
@@ -685,20 +503,18 @@ if (
             }
         );
 
-
     revealElements.forEach(
         (element) => {
-            revealObserver
-                .observe(
-                    element
-                );
+            revealObserver.observe(
+                element
+            );
         }
     );
 }
 
 
 // ==========================================================
-// CONTACT FORM
+// CONTACT FORM VALIDATION
 // ==========================================================
 
 const emailPattern =
@@ -709,76 +525,56 @@ const showError = (
     input,
     message
 ) => {
-    input
-        .classList
-        .add(
-            "error"
-        );
-
+    input.classList.add(
+        "error"
+    );
 
     input.setAttribute(
         "aria-invalid",
         "true"
     );
 
-
     const formField =
         input.closest(
             ".form-field"
         );
 
-
     const errorMessage =
-        formField
-            .querySelector(
-                ".error-message"
-            );
-
+        formField.querySelector(
+            ".error-message"
+        );
 
     errorMessage.textContent =
         message;
 };
 
 
-const clearError =
-    (input) => {
+const clearError = (input) => {
+    input.classList.remove(
+        "error"
+    );
 
-        input
-            .classList
-            .remove(
-                "error"
-            );
+    input.removeAttribute(
+        "aria-invalid"
+    );
 
-
-        input.removeAttribute(
-            "aria-invalid"
+    const formField =
+        input.closest(
+            ".form-field"
         );
 
+    const errorMessage =
+        formField.querySelector(
+            ".error-message"
+        );
 
-        const formField =
-            input.closest(
-                ".form-field"
-            );
-
-
-        const errorMessage =
-            formField
-                .querySelector(
-                    ".error-message"
-                );
-
-
-        errorMessage.textContent =
-            "";
-    };
+    errorMessage.textContent = "";
+};
 
 
 const validateName = () => {
     const value =
-        nameInput
-            .value
-            .trim();
-
+        nameInput.value.trim();
 
     if (!value) {
         showError(
@@ -789,11 +585,7 @@ const validateName = () => {
         return false;
     }
 
-
-    clearError(
-        nameInput
-    );
-
+    clearError(nameInput);
 
     return true;
 };
@@ -801,10 +593,7 @@ const validateName = () => {
 
 const validateEmail = () => {
     const value =
-        emailInput
-            .value
-            .trim();
-
+        emailInput.value.trim();
 
     if (!value) {
         showError(
@@ -815,12 +604,8 @@ const validateEmail = () => {
         return false;
     }
 
-
     if (
-        !emailPattern
-            .test(
-                value
-            )
+        !emailPattern.test(value)
     ) {
         showError(
             emailInput,
@@ -830,11 +615,7 @@ const validateEmail = () => {
         return false;
     }
 
-
-    clearError(
-        emailInput
-    );
-
+    clearError(emailInput);
 
     return true;
 };
@@ -842,10 +623,7 @@ const validateEmail = () => {
 
 const validateMessage = () => {
     const value =
-        messageInput
-            .value
-            .trim();
-
+        messageInput.value.trim();
 
     if (!value) {
         showError(
@@ -856,11 +634,7 @@ const validateMessage = () => {
         return false;
     }
 
-
-    clearError(
-        messageInput
-    );
-
+    clearError(messageInput);
 
     return true;
 };
@@ -870,14 +644,11 @@ const validateForm = () => {
     const isNameValid =
         validateName();
 
-
     const isEmailValid =
         validateEmail();
 
-
     const isMessageValid =
         validateMessage();
-
 
     return (
         isNameValid &&
@@ -887,26 +658,89 @@ const validateForm = () => {
 };
 
 
+// ==========================================================
+// CONTACT FORM STATUS
+// ==========================================================
+
 const clearFormStatus = () => {
-    formStatus.textContent =
-        "";
+    formStatus.textContent = "";
+
+    formStatus.classList.remove(
+        "success",
+        "error"
+    );
 };
 
+
+const setFormStatus = (
+    message,
+    type = ""
+) => {
+    formStatus.textContent =
+        message;
+
+    formStatus.classList.remove(
+        "success",
+        "error"
+    );
+
+    if (type) {
+        formStatus.classList.add(
+            type
+        );
+    }
+};
+
+
+// ==========================================================
+// SUBMITTING STATE
+// ==========================================================
+
+const setSubmittingState = (
+    isSubmitting
+) => {
+    contactForm.classList.toggle(
+        "is-submitting",
+        isSubmitting
+    );
+
+    contactForm.setAttribute(
+        "aria-busy",
+        String(isSubmitting)
+    );
+
+    /*
+        중요:
+        input을 disabled 하면
+        FormData에 포함되지 않는다.
+
+        따라서 전송 중에는
+        submit 버튼만 비활성화한다.
+    */
+
+    submitButton.disabled =
+        isSubmitting;
+
+    submitLabel.textContent =
+        isSubmitting
+            ? "Sending..."
+            : "Send Message";
+};
+
+
+// ==========================================================
+// FORM INPUT EVENTS
+// ==========================================================
 
 nameInput.addEventListener(
     "input",
     () => {
         clearFormStatus();
 
-
         if (
-            nameInput
-                .value
-                .trim()
+            nameInput.value.trim()
         ) {
-            clearError(
-                nameInput
-            );
+            clearError(nameInput);
         }
     }
 );
@@ -917,22 +751,13 @@ emailInput.addEventListener(
     () => {
         clearFormStatus();
 
-
         const value =
-            emailInput
-                .value
-                .trim();
-
+            emailInput.value.trim();
 
         if (
-            emailPattern
-                .test(
-                    value
-                )
+            emailPattern.test(value)
         ) {
-            clearError(
-                emailInput
-            );
+            clearError(emailInput);
         }
     }
 );
@@ -943,11 +768,8 @@ messageInput.addEventListener(
     () => {
         clearFormStatus();
 
-
         if (
-            messageInput
-                .value
-                .trim()
+            messageInput.value.trim()
         ) {
             clearError(
                 messageInput
@@ -957,54 +779,178 @@ messageInput.addEventListener(
 );
 
 
+// ==========================================================
+// FORM SUBMIT
+// ==========================================================
+
 contactForm.addEventListener(
     "submit",
-    (event) => {
+    async (event) => {
         event.preventDefault();
 
+        clearFormStatus();
 
         const isValid =
             validateForm();
 
-
         if (!isValid) {
-            formStatus.textContent =
-                "";
-
-
             const firstInvalidInput =
-                contactForm
-                    .querySelector(
-                        ".error"
-                    );
-
+                contactForm.querySelector(
+                    ".error"
+                );
 
             if (
                 firstInvalidInput
             ) {
-                firstInvalidInput
-                    .focus();
+                firstInvalidInput.focus();
             }
-
 
             return;
         }
 
 
-        formStatus.textContent =
-            "메시지가 정상적으로 작성되었습니다.";
+        if (
+            contactForm.action.includes(
+                "YOUR_FORM_ID"
+            )
+        ) {
+            setFormStatus(
+                "Formspree Form ID를 먼저 설정해주세요.",
+                "error"
+            );
+
+            return;
+        }
 
 
-        contactForm.reset();
+        /*
+            먼저 FormData를 생성한다.
+
+            현재 input들은 모두 활성 상태이므로
+            name / email / message가 정상적으로 들어간다.
+        */
+
+        const formData =
+            new FormData(
+                contactForm
+            );
 
 
-        [
-            nameInput,
-            emailInput,
-            messageInput,
-        ].forEach(
-            clearError
-        );
+        /*
+            중복 클릭 방지를 위해
+            FormData 생성 후 버튼을 비활성화한다.
+        */
+
+        setSubmittingState(true);
+
+
+        try {
+            const response =
+                await fetch(
+                    contactForm.action,
+                    {
+                        method: "POST",
+
+                        body: formData,
+
+                        headers: {
+                            Accept:
+                                "application/json",
+                        },
+                    }
+                );
+
+
+            if (
+                response.status ===
+                429
+            ) {
+                throw new Error(
+                    "RATE_LIMIT"
+                );
+            }
+
+
+            if (!response.ok) {
+                let message =
+                    "메시지를 전송하지 못했습니다.";
+
+                try {
+                    const data =
+                        await response.json();
+
+                    if (
+                        Array.isArray(
+                            data.errors
+                        ) &&
+                        data.errors.length >
+                            0
+                    ) {
+                        message =
+                            data.errors
+                                .map(
+                                    ({
+                                        message:
+                                            errorMessage,
+                                    }) =>
+                                        errorMessage
+                                )
+                                .join(" ");
+                    }
+                } catch {
+                    /*
+                        JSON 응답이 아닌 경우
+                        기본 메시지 사용
+                    */
+                }
+
+                throw new Error(
+                    message
+                );
+            }
+
+
+            contactForm.reset();
+
+
+            [
+                nameInput,
+                emailInput,
+                messageInput,
+            ].forEach(
+                clearError
+            );
+
+
+            setFormStatus(
+                "메시지가 전송되었습니다. 감사합니다!",
+                "success"
+            );
+
+        } catch (error) {
+            console.error(error);
+
+            if (
+                error.message ===
+                "RATE_LIMIT"
+            ) {
+                setFormStatus(
+                    "요청이 너무 많습니다. 잠시 후 다시 시도해주세요.",
+                    "error"
+                );
+
+                return;
+            }
+
+            setFormStatus(
+                error.message ||
+                "메시지를 전송하지 못했습니다. 잠시 후 다시 시도해주세요.",
+                "error"
+            );
+
+        } finally {
+            setSubmittingState(false);
+        }
     }
 );
 
@@ -1013,45 +959,29 @@ contactForm.addEventListener(
 // GITHUB PROJECTS
 // ==========================================================
 
-let allRepositories =
-    [];
-
-
-let currentProjectFilter =
-    "ALL";
+let allRepositories = [];
+let currentProjectFilter = "ALL";
 
 
 // ==========================================================
 // ESCAPE HTML
 // ==========================================================
 
-const escapeHTML =
-    (value) => {
-
-        const entities = {
-            "&": "&amp;",
-
-            "<": "&lt;",
-
-            ">": "&gt;",
-
-            "\"": "&quot;",
-
-            "'": "&#039;",
-        };
-
-
-        return String(
-            value
-        ).replace(
-            /[&<>"']/g,
-
-            (character) =>
-                entities[
-                    character
-                ]
-        );
+const escapeHTML = (value) => {
+    const entities = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        "\"": "&quot;",
+        "'": "&#039;",
     };
+
+    return String(value).replace(
+        /[&<>"']/g,
+        (character) =>
+            entities[character]
+    );
+};
 
 
 // ==========================================================
@@ -1061,48 +991,41 @@ const escapeHTML =
 const renderProjectFilters =
     (repositories) => {
 
-        const languages =
-            [
-                ...new Set(
-                    repositories
-                        .map(
-                            ({
-                                language,
-                            }) =>
-                                language
-                        )
-                        .filter(
-                            Boolean
-                        )
-                ),
-            ].sort(
-                (
-                    first,
-                    second
-                ) =>
-                    first.localeCompare(
-                        second
+        const languages = [
+            ...new Set(
+                repositories
+                    .map(
+                        ({
+                            language,
+                        }) =>
+                            language
                     )
-            );
+                    .filter(Boolean)
+            ),
+        ].sort(
+            (
+                first,
+                second
+            ) =>
+                first.localeCompare(
+                    second
+                )
+        );
 
 
-        const filters =
-            [
-                "ALL",
-                ...languages,
-            ];
+        const filters = [
+            "ALL",
+            ...languages,
+        ];
 
 
-        projectFilters
-            .innerHTML =
+        projectFilters.innerHTML =
             filters
                 .map(
                     (filter) => {
-
                         const isActive =
                             filter ===
                             currentProjectFilter;
-
 
                         const label =
                             filter === "ALL"
@@ -1111,12 +1034,10 @@ const renderProjectFilters =
                                     filter
                                 );
 
-
                         const encodedFilter =
                             encodeURIComponent(
                                 filter
                             );
-
 
                         return `
                             <button
@@ -1130,9 +1051,7 @@ const renderProjectFilters =
                         `;
                     }
                 )
-                .join(
-                    ""
-                );
+                .join("");
 
 
         projectFilters.hidden =
@@ -1145,24 +1064,19 @@ const renderProjectFilters =
 // ==========================================================
 
 const hideProjectFilters = () => {
-    projectFilters.hidden =
-        true;
+    projectFilters.hidden = true;
 
-
-    projectFilters.innerHTML =
-        "";
+    projectFilters.innerHTML = "";
 };
 
 
 const renderLoading = () => {
     hideProjectFilters();
 
-
     projectsList.setAttribute(
         "aria-busy",
         "true"
     );
-
 
     projectsList.innerHTML = `
         <p class="projects-status">
@@ -1175,12 +1089,10 @@ const renderLoading = () => {
 const renderEmpty = () => {
     hideProjectFilters();
 
-
     projectsList.setAttribute(
         "aria-busy",
         "false"
     );
-
 
     projectsList.innerHTML = `
         <p class="projects-status">
@@ -1196,7 +1108,6 @@ const renderFilteredEmpty = () => {
         "false"
     );
 
-
     projectsList.innerHTML = `
         <p class="projects-status">
             해당 언어의 프로젝트가 없습니다.
@@ -1205,35 +1116,31 @@ const renderFilteredEmpty = () => {
 };
 
 
-const renderError =
-    (message) => {
+const renderError = (message) => {
+    hideProjectFilters();
 
-        hideProjectFilters();
+    projectsList.setAttribute(
+        "aria-busy",
+        "false"
+    );
 
+    projectsList.innerHTML = `
+        <div class="projects-status">
 
-        projectsList.setAttribute(
-            "aria-busy",
-            "false"
-        );
+            <p>
+                ${escapeHTML(message)}
+            </p>
 
+            <button
+                type="button"
+                class="retry-projects"
+            >
+                다시 시도
+            </button>
 
-        projectsList.innerHTML = `
-            <div class="projects-status">
-
-                <p>
-                    ${escapeHTML(message)}
-                </p>
-
-                <button
-                    type="button"
-                    class="retry-projects"
-                >
-                    다시 시도
-                </button>
-
-            </div>
-        `;
-    };
+        </div>
+    `;
+};
 
 
 // ==========================================================
@@ -1263,15 +1170,11 @@ const renderProjects =
                         language,
                         stargazers_count,
                         forks_count,
-                    } =
-                        repository;
+                    } = repository;
 
 
                     const safeName =
-                        escapeHTML(
-                            name
-                        );
-
+                        escapeHTML(name);
 
                     const safeDescription =
                         escapeHTML(
@@ -1279,13 +1182,11 @@ const renderProjects =
                             "프로젝트 설명이 없습니다."
                         );
 
-
                     const safeLanguage =
                         escapeHTML(
                             language ||
                             "Unknown"
                         );
-
 
                     const safeUrl =
                         escapeHTML(
@@ -1346,9 +1247,7 @@ const renderProjects =
 
 
         projectsList.innerHTML =
-            cards.join(
-                ""
-            );
+            cards.join("");
     };
 
 
@@ -1356,176 +1255,153 @@ const renderProjects =
 // FILTER PROJECTS
 // ==========================================================
 
-const renderFilteredProjects =
-    () => {
-
-        const filteredRepositories =
-            currentProjectFilter ===
-            "ALL"
-
-                ? allRepositories
-
-                : allRepositories
-                    .filter(
-                        ({
-                            language,
-                        }) =>
-                            language ===
-                            currentProjectFilter
-                    );
+const renderFilteredProjects = () => {
+    const filteredRepositories =
+        currentProjectFilter === "ALL"
+            ? allRepositories
+            : allRepositories.filter(
+                ({
+                    language,
+                }) =>
+                    language ===
+                    currentProjectFilter
+            );
 
 
-        if (
-            filteredRepositories
-                .length === 0
-        ) {
-            renderFilteredEmpty();
+    if (
+        filteredRepositories.length ===
+        0
+    ) {
+        renderFilteredEmpty();
 
-            return;
-        }
+        return;
+    }
 
 
-        renderProjects(
-            filteredRepositories
-        );
-    };
+    renderProjects(
+        filteredRepositories
+    );
+};
 
 
 // ==========================================================
 // FETCH PROJECTS
 // ==========================================================
 
-const fetchProjects =
-    async () => {
-
-        renderLoading();
+const fetchProjects = async () => {
+    renderLoading();
 
 
-        try {
-            const response =
-                await fetch(
-                    GITHUB_API_URL
-                );
-
-
-            if (
-                response.status ===
-                    403 ||
-
-                response.status ===
-                    429
-            ) {
-                throw new Error(
-                    "RATE_LIMIT"
-                );
-            }
-
-
-            if (
-                response.status ===
-                404
-            ) {
-                throw new Error(
-                    "NOT_FOUND"
-                );
-            }
-
-
-            if (
-                !response.ok
-            ) {
-                throw new Error(
-                    `HTTP_${response.status}`
-                );
-            }
-
-
-            const repositories =
-                await response.json();
-
-
-            if (
-                !Array.isArray(
-                    repositories
-                )
-            ) {
-                throw new Error(
-                    "INVALID_DATA"
-                );
-            }
-
-
-            if (
-                repositories.length ===
-                0
-            ) {
-                allRepositories =
-                    [];
-
-
-                renderEmpty();
-
-
-                return;
-            }
-
-
-            allRepositories =
-                repositories;
-
-
-            currentProjectFilter =
-                "ALL";
-
-
-            renderProjectFilters(
-                allRepositories
+    try {
+        const response =
+            await fetch(
+                GITHUB_API_URL
             );
 
 
-            renderFilteredProjects();
-
-        } catch (error) {
-            console.error(
-                error
-            );
-
-
-            if (
-                error.message ===
+        if (
+            response.status === 403 ||
+            response.status === 429
+        ) {
+            throw new Error(
                 "RATE_LIMIT"
-            ) {
-                renderError(
-                    "GitHub API 요청 한도를 초과했습니다. 잠시 후 다시 시도해주세요."
-                );
-
-
-                return;
-            }
-
-
-            if (
-                error.message ===
-                "NOT_FOUND"
-            ) {
-                renderError(
-                    "GitHub 사용자를 찾을 수 없습니다."
-                );
-
-
-                return;
-            }
-
-
-            renderError(
-                "프로젝트를 불러올 수 없습니다."
             );
         }
-    };
+
+
+        if (
+            response.status === 404
+        ) {
+            throw new Error(
+                "NOT_FOUND"
+            );
+        }
+
+
+        if (!response.ok) {
+            throw new Error(
+                `HTTP_${response.status}`
+            );
+        }
+
+
+        const repositories =
+            await response.json();
+
+
+        if (
+            !Array.isArray(
+                repositories
+            )
+        ) {
+            throw new Error(
+                "INVALID_DATA"
+            );
+        }
+
+
+        if (
+            repositories.length === 0
+        ) {
+            allRepositories = [];
+
+            renderEmpty();
+
+            return;
+        }
+
+
+        allRepositories =
+            repositories;
+
+        currentProjectFilter =
+            "ALL";
+
+
+        renderProjectFilters(
+            allRepositories
+        );
+
+
+        renderFilteredProjects();
+
+    } catch (error) {
+        console.error(error);
+
+
+        if (
+            error.message ===
+            "RATE_LIMIT"
+        ) {
+            renderError(
+                "GitHub API 요청 한도를 초과했습니다. 잠시 후 다시 시도해주세요."
+            );
+
+            return;
+        }
+
+
+        if (
+            error.message ===
+            "NOT_FOUND"
+        ) {
+            renderError(
+                "GitHub 사용자를 찾을 수 없습니다."
+            );
+
+            return;
+        }
+
+
+        renderError(
+            "프로젝트를 불러올 수 없습니다."
+        );
+    }
+};
 
 
 // ==========================================================
-// FILTER BUTTON EVENT
+// FILTER EVENT
 // ==========================================================
 
 projectFilters.addEventListener(
@@ -1548,9 +1424,7 @@ projectFilters.addEventListener(
             );
 
 
-        if (
-            !filterButton
-        ) {
+        if (!filterButton) {
             return;
         }
 
@@ -1597,9 +1471,7 @@ projectsList.addEventListener(
             );
 
 
-        if (
-            !retryButton
-        ) {
+        if (!retryButton) {
             return;
         }
 

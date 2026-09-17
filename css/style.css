@@ -20,6 +20,8 @@
         rgba(21, 154, 165, 0.18);
 
     --color-error: #c84f4b;
+    --color-success: #168a74;
+
 
     /* Pool Lane */
 
@@ -34,6 +36,7 @@
 
     --lane-red:
         rgba(199, 93, 86, 0.24);
+
 
     /* Background */
 
@@ -80,6 +83,7 @@
     --lamp-light-rgb:
         242, 199, 125;
 
+
     /* Layout */
 
     --max-width: 1100px;
@@ -96,6 +100,7 @@
 
     --transition:
         0.3s ease;
+
 
     /* Pointer */
 
@@ -126,6 +131,8 @@
         rgba(112, 212, 208, 0.14);
 
     --color-error: #ff8a86;
+    --color-success: #77d7bc;
+
 
     --lane-base:
         rgba(101, 183, 191, 0.055);
@@ -138,6 +145,7 @@
 
     --lane-red:
         rgba(174, 100, 93, 0.12);
+
 
     --background-main:
         radial-gradient(
@@ -629,7 +637,7 @@ section[id] {
 
 
 /* =========================================================
-   CONTENT LAYER
+   CONTENT
 ========================================================= */
 
 main,
@@ -1934,6 +1942,11 @@ main,
 
     color:
         var(--color-text);
+
+    transition:
+        border-color var(--transition),
+        box-shadow var(--transition),
+        background-color var(--transition);
 }
 
 .form-field input:focus,
@@ -1958,6 +1971,9 @@ main,
     resize:
         vertical;
 }
+
+
+/* Error */
 
 .error-message {
     min-height:
@@ -1985,8 +2001,14 @@ textarea[aria-invalid="true"] {
         var(--color-error);
 }
 
+
+/* Submit */
+
 .contact-form
 button[type="submit"] {
+    min-height:
+        50px;
+
     padding:
         0.95rem
         1.5rem;
@@ -2006,22 +2028,65 @@ button[type="submit"] {
 
     font-weight:
         700;
+
+    transition:
+        opacity var(--transition),
+        transform var(--transition),
+        box-shadow var(--transition);
+}
+
+.contact-form
+button[type="submit"]:hover:not(:disabled) {
+    transform:
+        translateY(-3px);
+
+    box-shadow:
+        var(--shadow-hover);
+}
+
+.contact-form
+button[type="submit"]:disabled {
+    cursor:
+        wait;
+
+    opacity:
+        0.58;
+}
+
+.contact-form.is-submitting
+input,
+
+.contact-form.is-submitting
+textarea {
+    opacity:
+        0.75;
 }
 
 .form-status {
     min-height:
         1.5rem;
 
-    text-align: center;
+    text-align:
+        center;
 
     color:
-        var(--color-aqua-deep);
+        var(--color-text-muted);
 
     font-size:
         0.9rem;
 
     font-weight:
         600;
+}
+
+.form-status.success {
+    color:
+        var(--color-success);
+}
+
+.form-status.error {
+    color:
+        var(--color-error);
 }
 
 
@@ -2246,7 +2311,8 @@ button[type="submit"] {
         flex-direction:
             row;
 
-        align-items: center;
+        align-items:
+            center;
 
         justify-content:
             space-between;

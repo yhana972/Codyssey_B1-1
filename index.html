@@ -165,10 +165,6 @@
 
                     <br>
 
-                    <!--
-                        시각적으로 보이는 타이핑 애니메이션.
-                        접근성 도구에서는 숨긴다.
-                    -->
                     <span
                         class="hero-typing-line"
                         aria-hidden="true"
@@ -187,9 +183,6 @@
                     </span>
 
 
-                    <!--
-                        스크린리더에는 완성된 문장을 바로 제공
-                    -->
                     <span class="sr-only">
                         서비스의 흐름을 설계합니다.
                     </span>
@@ -325,7 +318,6 @@
 
 
             <div class="skills-grid">
-
 
                 <!-- LANE 01 -->
                 <article
@@ -680,8 +672,17 @@
             </header>
 
 
+            <!--
+                Formspree 설정
+
+                YOUR_FORM_ID 부분만
+                Formspree에서 발급받은 ID로 변경
+            -->
             <form
                 class="contact-form"
+                id="contact-form"
+                action="https://formspree.io/f/maenyqke"
+                method="POST"
                 novalidate
                 data-reveal
             >
@@ -757,8 +758,13 @@
                 </div>
 
 
-                <button type="submit">
-                    Send Message
+                <button
+                    class="submit-button"
+                    type="submit"
+                >
+                    <span class="submit-label">
+                        Send Message
+                    </span>
                 </button>
 
 
